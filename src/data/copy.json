@@ -1,23 +1,6 @@
 {
-	"meta": { "title": "Title TK", "description": "Description tk." },
-	"body": [
-		{
-			"section": "intro",
-			"content": [
-				{ "type": "h4", "value": "An h4 element with no attributes" },
-				{
-					"type": "text",
-					"value": "Some random text here, followed by an img tag."
-				},
-				{
-					"type": "img",
-					"value": { "src": "../assets/demo/test.jpg", "alt": "A cat" }
-				},
-				{
-					"type": "Test",
-					"value": { "label": "I’m a custom component!", "value": "50" }
-				}
-			]
-		}
-	]
+	"title": "lindy.design",
+	"description": "Timeless ideas, explained through timeless design. Visual essays exploring concepts that have stood—and will stand—the test of time.",
+	"url": "https://lindy.design",
+	"keywords": "visual essays, lindy effect, timeless design, nassim taleb, data visualization, design thinking"
 }
