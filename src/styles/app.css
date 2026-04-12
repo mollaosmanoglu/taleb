@@ -27,8 +27,8 @@
 	--radius-md: 0.5rem;
 	--radius-lg: 1rem;
 	
-	--color-bg: var(--color-white);
-	--color-fg: var(--color-gray-900);
+	--color-bg: var(--color-bg-warm, var(--color-white));
+	--color-fg: var(--color-black);
 	--color-fg-light: var(--color-gray-500);
 	--color-primary: var(--color-black);
 	--color-link: var(--color-black);
@@ -44,6 +44,16 @@
 	--color-input-bg: var(--color-gray-50);
 	--color-input-fg: var(--color-gray-900);
 	--color-placeholder: var(--color-gray-500);
+
+	--chart-max-width-sm: 960px;
+	--chart-max-width-lg: 1600px;
+
+	/* taleb — semantic colors */
+	--color-fragile: oklch(0.577 0.194 28);       /* warm red — things that break */
+	--color-robust: oklch(0.556 0 0);              /* neutral gray — things that endure */
+	--color-antifragile: oklch(0.546 0.107 241);   /* deep blue — things that gain */
+	--color-bg-warm: oklch(98% 0.004 80);          /* barely-there warm tint */
+	--color-accent: var(--color-gold);              /* amber for highlights */
 
 	/* "1" second duration */
 	--1s: 1ms;

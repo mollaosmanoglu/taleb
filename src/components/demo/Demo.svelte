@@ -4,7 +4,6 @@
 	import DemoSvelteElement from "$components/demo/Demo.SvelteElement.svelte";
 	import DemoSvelteComponent from "$components/demo/Demo.SvelteComponent.svelte";
 	import DemoScrolly from "$components/demo/Demo.Scrolly.svelte";
-	import DemoMicroCMS from "$components/demo/Demo.MicroCMS.svelte";
 	import DemoSvelte5 from "$components/demo/Demo.Svelte5.svelte";
 	import DemoLoadData from "$components/demo/Demo.LoadData.svelte";
 	let value = $state(0);
