@@ -1,21 +1,64 @@
 <script>
 	// Section III — Stone and Pebbles
-	// Pattern: scrollytelling (scroll the stone size, watch harm curve)
-	// Figure: graphical tour Fig 28 — concavity at scale
+	// Pattern: scrollytelling with sticky SVG concavity curve
+	// Figure: graphical tour Fig 28 — harm vs size of stone
 	import Scrolly from "$components/helpers/Scrolly.svelte";
+	import { line, area, scaleLinear, curveBasis } from "d3";
 
 	let value = $state(undefined);
 
+	const w = 420;
+	const h = 240;
+	const m = { top: 16, right: 24, bottom: 36, left: 56 };
+	const plotW = w - m.left - m.right;
+	const plotH = h - m.top - m.bottom;
+
+	// Concavity function: harm = maxHarm * (1 - exp(-k * size))
+	// Accelerating harm that flattens at maximum
+	const maxHarm = 0.95;
+	const k = 0.06;
+	const nPoints = 100;
+	const maxSize = 100;
+
+	const curveData = Array.from({ length: nPoints + 1 }, (_, i) => {
+		const size = (i / nPoints) * maxSize;
+		const harm = maxHarm * (1 - Math.exp(-k * size));
+		const linear = (size / maxSize) * maxHarm * 0.4; // linear reference
+		return { size, harm, linear };
+	});
+
+	const xScale = scaleLinear().domain([0, maxSize]).range([m.left, m.left + plotW]);
+	const yScale = scaleLinear().domain([0, 1]).range([m.top + plotH, m.top]);
+
+	const harmLine = line().x((d) => xScale(d.size)).y((d) => yScale(d.harm)).curve(curveBasis);
+	const linearLine = line().x((d) => xScale(d.size)).y((d) => yScale(d.linear));
+	const harmArea = area()
+		.x((d) => xScale(d.size))
+		.y0(m.top + plotH)
+		.y1((d) => yScale(d.harm))
+		.curve(curveBasis);
+
+	const fullCurvePath = harmLine(curveData);
+	const linearPath = linearLine(curveData);
+
+	// Scroll steps — each maps to a position on the curve
 	const steps = [
-		{ stone: 1, harm: 1, text: "One small pebble. Barely a scratch." },
-		{ stone: 5, harm: 8, text: "A fistful of stones. The bruise is worse than five scratches." },
-		{ stone: 10, harm: 30, text: "A heavy rock. The damage isn't 10x — it's 30x." },
-		{ stone: 20, harm: 120, text: "A boulder. Harm isn't proportional. It accelerates." },
-		{ stone: 50, harm: 500, text: "One massive stone. This is what kills. Concavity is the trap." }
+		{ size: 5, text: "A pebble. Barely a scratch. Harm is proportional." },
+		{ size: 20, text: "A handful of stones. The bruise is already worse than four scratches." },
+		{ size: 45, text: "A heavy rock. Harm accelerates — it's no longer proportional." },
+		{ size: 70, text: "A boulder. The curve bends hard. Damage compounds." },
+		{ size: 95, text: "One massive stone. Near maximum harm. Concavity is the trap." }
 	];
 
-	let current = $derived(steps[value] ?? steps[0]);
-	let progress = $derived((current.harm / 500) * 100);
+	let stepIndex = $derived(value ?? 0);
+	let currentSize = $derived(steps[stepIndex]?.size ?? 5);
+	let currentHarm = $derived(maxHarm * (1 - Math.exp(-k * currentSize)));
+	let dotX = $derived(xScale(currentSize));
+	let dotY = $derived(yScale(currentHarm));
+
+	// Partial area fill up to the current dot
+	let partialData = $derived(curveData.filter((d) => d.size <= currentSize));
+	let partialArea = $derived(harmArea(partialData));
 </script>
 
 <section id="stone">
@@ -29,14 +72,59 @@
 
 	<div class="scrolly-container">
 		<div class="sticky-figure">
-			<div class="bar-container">
-				<div class="bar-label">Stone size: {current.stone}</div>
-				<div class="bar-track">
-					<div class="bar-fill" style:width="{progress}%"></div>
-				</div>
-				<div class="bar-label">Harm: {current.harm}x</div>
-			</div>
-			<p class="step-text">{current.text}</p>
+			<svg viewBox="0 0 {w} {h}" class="chart">
+				<!-- axes -->
+				<line x1={m.left} y1={m.top + plotH} x2={m.left + plotW} y2={m.top + plotH}
+					stroke="var(--color-gray-300)" stroke-width="1" />
+				<line x1={m.left} y1={m.top} x2={m.left} y2={m.top + plotH}
+					stroke="var(--color-gray-300)" stroke-width="1" />
+
+				<!-- axis labels -->
+				<text x={m.left + plotW / 2} y={h - 6} text-anchor="middle"
+					fill="var(--color-gray-500)" font-size="10" font-family="var(--font-sans)">
+					Size of Stone
+				</text>
+				<text x={16} y={m.top + plotH / 2} text-anchor="middle"
+					fill="var(--color-gray-500)" font-size="10" font-family="var(--font-sans)"
+					transform="rotate(-90, 16, {m.top + plotH / 2})">
+					Harm
+				</text>
+
+				<!-- maximum harm label -->
+				<text x={m.left + plotW + 2} y={yScale(maxHarm) + 4}
+					fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
+					max
+				</text>
+				<line x1={m.left} y1={yScale(maxHarm)} x2={m.left + plotW} y2={yScale(maxHarm)}
+					stroke="var(--color-gray-200)" stroke-width="1" stroke-dasharray="3 3" />
+
+				<!-- linear reference -->
+				<path d={linearPath} fill="none"
+					stroke="var(--color-gray-300)" stroke-width="1" stroke-dasharray="4 4" />
+				<text x={xScale(85)} y={yScale(curveData[85].linear) - 6}
+					fill="var(--color-gray-400)" font-size="8" font-style="italic"
+					font-family="var(--font-sans)">
+					if linear
+				</text>
+
+				<!-- shaded area up to dot -->
+				<path d={partialArea} fill="var(--color-fragile)" opacity="0.12" />
+
+				<!-- the concavity curve -->
+				<path d={fullCurvePath} fill="none"
+					stroke="var(--color-fg)" stroke-width="2.5" />
+
+				<!-- moving dot -->
+				<circle cx={dotX} cy={dotY} r="5"
+					fill="var(--color-fragile)" stroke="var(--color-bg-warm, white)" stroke-width="2" />
+
+				<!-- dot value labels -->
+				<text x={dotX} y={dotY - 12} text-anchor="middle"
+					fill="var(--color-fragile)" font-size="10" font-weight="700"
+					font-family="var(--font-mono, monospace)">
+					{(currentHarm * 100).toFixed(0)}%
+				</text>
+			</svg>
 		</div>
 
 		<div class="steps">
@@ -44,7 +132,7 @@
 				{#each steps as step, i}
 					{@const active = value === i}
 					<div class="step" class:active>
-						<p>Stone size: <strong>{step.stone}</strong> → Harm: <strong>{step.harm}x</strong></p>
+						<p>{step.text}</p>
 					</div>
 				{/each}
 			</Scrolly>
@@ -95,50 +183,18 @@
 
 	.sticky-figure {
 		position: sticky;
-		top: 15vh;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 16px;
-		padding: 32px;
-		background: var(--color-bg, #fff);
+		top: 10vh;
 		z-index: 1;
-		margin-bottom: -50vh;
-	}
-
-	.bar-container {
-		width: 100%;
-		max-width: 400px;
+		background: var(--color-bg-warm, white);
+		padding: 16px 0;
 		display: flex;
-		flex-direction: column;
-		gap: 8px;
+		justify-content: center;
 	}
 
-	.bar-label {
-		font-family: var(--font-mono, monospace);
-		font-size: var(--14px);
-		color: var(--color-gray-600);
-	}
-
-	.bar-track {
+	.chart {
 		width: 100%;
-		height: 24px;
-		background: var(--color-gray-200);
-		overflow: hidden;
-	}
-
-	.bar-fill {
-		height: 100%;
-		background: var(--color-fg, #1a1a1a);
-		transition: width 0.5s ease;
-	}
-
-	.step-text {
-		font-size: var(--16px, 1rem);
-		color: var(--color-gray-800);
-		text-align: center;
-		max-width: 400px;
-		min-height: 3em;
+		max-width: 500px;
+		height: auto;
 	}
 
 	.steps {
@@ -148,11 +204,11 @@
 	}
 
 	.step {
-		min-height: 80vh;
+		min-height: 70vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		opacity: 0.2;
+		opacity: 0.15;
 		transition: opacity 0.3s ease;
 	}
 
@@ -161,10 +217,14 @@
 	}
 
 	.step p {
-		background: var(--color-bg, #fff);
+		background: var(--color-bg-warm, white);
 		padding: 12px 20px;
 		font-size: var(--16px, 1rem);
+		line-height: 1.6;
+		max-width: 360px;
+		text-align: center;
 		pointer-events: all;
+		color: var(--color-gray-800);
 	}
 
 	.message {
@@ -173,5 +233,11 @@
 		color: var(--color-gray-800);
 		max-width: 540px;
 		margin-top: 48px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.step {
+			transition: none;
+		}
 	}
 </style>

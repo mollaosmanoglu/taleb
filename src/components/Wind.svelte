@@ -1,10 +1,79 @@
 <script>
 	// Section I — How to Love the Wind
-	// Pattern: stacked (candle vs fire, CSS animated)
-	// Figure: graphical tour Fig 21 — robust vs antifragile time series
+	// Pattern: two side-by-side SVG time series, progressive draw
+	// Figure: graphical tour Fig 20 + 21 — fragile blowup vs antifragile spike
 	import inView from "$actions/inView.js";
+	import { line, scaleLinear } from "d3";
 
 	let visible = $state(false);
+	let frame = $state(0);
+	let animating = $state(false);
+
+	const totalFrames = 50;
+	const shockAt = 40; // 80% through
+	const w = 220;
+	const h = 160;
+	const m = { top: 12, right: 12, bottom: 28, left: 12 };
+	const plotW = w - m.left - m.right;
+	const plotH = h - m.top - m.bottom;
+
+	// Pre-compute random walks (deterministic via sin-based noise)
+	function buildWalk(seed, shockDir) {
+		let y = 0;
+		const pts = [{ i: 0, y: 0 }];
+		for (let i = 1; i <= totalFrames; i++) {
+			if (i <= shockAt) {
+				// Small random variations
+				const noise = Math.sin(i * seed) * 0.4 + Math.cos(i * seed * 0.7) * 0.3;
+				y += noise + 0.15; // slight upward drift
+				pts.push({ i, y });
+			} else if (i === shockAt + 1) {
+				// The shock
+				y += shockDir * (Math.abs(y) + 8);
+				pts.push({ i, y });
+			} else {
+				// After shock — stay near shock level
+				y += Math.sin(i * seed) * 0.2;
+				pts.push({ i, y });
+			}
+		}
+		return pts;
+	}
+
+	const fragileData = buildWalk(1.7, -3);
+	const antifragileData = buildWalk(2.3, 2.5);
+
+	// Scales
+	const allY = [...fragileData.map((d) => d.y), ...antifragileData.map((d) => d.y)];
+	const yMin = Math.min(...allY);
+	const yMax = Math.max(...allY);
+	const xScale = scaleLinear().domain([0, totalFrames]).range([m.left, m.left + plotW]);
+	const yScaleFragile = scaleLinear().domain([yMin, yMax]).range([m.top + plotH, m.top]);
+	const yScaleAnti = scaleLinear().domain([yMin, yMax]).range([m.top + plotH, m.top]);
+
+	const lineFragile = line().x((d) => xScale(d.i)).y((d) => yScaleFragile(d.y));
+	const lineAnti = line().x((d) => xScale(d.i)).y((d) => yScaleAnti(d.y));
+
+	let fragilePath = $derived(lineFragile(fragileData.slice(0, frame + 1)));
+	let antiPath = $derived(lineAnti(antifragileData.slice(0, frame + 1)));
+	let pastShock = $derived(frame > shockAt);
+
+	// Zero line y-position
+	let zeroY = $derived(yScaleFragile(0));
+
+	function animate() {
+		if (animating) return;
+		animating = true;
+		frame = 0;
+
+		const interval = setInterval(() => {
+			frame++;
+			if (frame >= totalFrames) {
+				clearInterval(interval);
+				animating = false;
+			}
+		}, 60);
+	}
 </script>
 
 <section id="wind">
@@ -18,27 +87,86 @@
 		class="figure"
 		class:visible
 		use:inView
-		onenter={() => (visible = true)}
+		onenter={() => { visible = true; animate(); }}
 	>
-		<div class="scene">
-			<div class="scene-label">Candle</div>
-			<div class="object candle">
-				<div class="flame candle-flame"></div>
-				<div class="body candle-body"></div>
+		<div class="charts">
+			<!-- Fragile time series -->
+			<div class="chart-wrapper">
+				<p class="chart-label" style:color="var(--color-fragile)">Fragile</p>
+				<svg viewBox="0 0 {w} {h}">
+					<!-- axes -->
+					<line x1={m.left} y1={m.top + plotH} x2={m.left + plotW} y2={m.top + plotH}
+						stroke="var(--color-gray-300)" stroke-width="1" />
+					<!-- zero reference -->
+					<line x1={m.left} y1={zeroY} x2={m.left + plotW} y2={zeroY}
+						stroke="var(--color-gray-200)" stroke-width="1" stroke-dasharray="3 3" />
+					<!-- axis labels -->
+					<text x={m.left + plotW / 2} y={h - 6} text-anchor="middle"
+						fill="var(--color-gray-400)" font-size="9" font-family="var(--font-sans)">
+						time
+					</text>
+					<text x={m.left - 4} y={m.top + 4} text-anchor="end"
+						fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
+						value
+					</text>
+					<!-- the line -->
+					{#if frame > 0}
+						<path d={fragilePath} fill="none"
+							stroke={pastShock ? "var(--color-fragile)" : "var(--color-fg)"}
+							stroke-width="2" stroke-linejoin="round" />
+					{/if}
+					<!-- blowup label -->
+					{#if pastShock}
+						<text x={xScale(shockAt + 2)} y={yScaleFragile(fragileData[shockAt + 1].y) - 6}
+							fill="var(--color-fragile)" font-size="9" font-weight="700"
+							font-family="var(--font-sans)">
+							Blowup
+						</text>
+						<text x={xScale(shockAt + 2)} y={yScaleFragile(fragileData[shockAt + 1].y) + 4}
+							fill="var(--color-fragile)" font-size="8"
+							font-family="var(--font-sans)">
+							(Black Swan)
+						</text>
+					{/if}
+				</svg>
 			</div>
-			<div class="wind-label">wind →</div>
-			<div class="outcome fragile-outcome">extinguished</div>
+
+			<!-- Antifragile time series -->
+			<div class="chart-wrapper">
+				<p class="chart-label" style:color="var(--color-antifragile)">Antifragile</p>
+				<svg viewBox="0 0 {w} {h}">
+					<!-- axes -->
+					<line x1={m.left} y1={m.top + plotH} x2={m.left + plotW} y2={m.top + plotH}
+						stroke="var(--color-gray-300)" stroke-width="1" />
+					<!-- zero reference -->
+					<line x1={m.left} y1={zeroY} x2={m.left + plotW} y2={zeroY}
+						stroke="var(--color-gray-200)" stroke-width="1" stroke-dasharray="3 3" />
+					<!-- axis labels -->
+					<text x={m.left + plotW / 2} y={h - 6} text-anchor="middle"
+						fill="var(--color-gray-400)" font-size="9" font-family="var(--font-sans)">
+						time
+					</text>
+					<!-- the line -->
+					{#if frame > 0}
+						<path d={antiPath} fill="none"
+							stroke={pastShock ? "var(--color-antifragile)" : "var(--color-fg)"}
+							stroke-width="2" stroke-linejoin="round" />
+					{/if}
+					<!-- spike label -->
+					{#if pastShock}
+						<text x={xScale(shockAt + 2)} y={yScaleAnti(antifragileData[shockAt + 1].y) + 14}
+							fill="var(--color-antifragile)" font-size="9" font-weight="700"
+							font-family="var(--font-sans)">
+							Gains from disorder
+						</text>
+					{/if}
+				</svg>
+			</div>
 		</div>
 
-		<div class="scene">
-			<div class="scene-label">Fire</div>
-			<div class="object fire">
-				<div class="flame fire-flame"></div>
-				<div class="body fire-body"></div>
-			</div>
-			<div class="wind-label">wind →</div>
-			<div class="outcome antifragile-outcome">energized</div>
-		</div>
+		<button class="replay" onclick={animate} disabled={animating}>
+			{animating ? "..." : "replay"}
+		</button>
 	</div>
 
 	<p class="message">
@@ -85,8 +213,9 @@
 
 	.figure {
 		display: flex;
-		gap: 48px;
-		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		gap: 16px;
 		margin-bottom: 48px;
 		opacity: 0;
 		transform: translateY(24px);
@@ -98,114 +227,49 @@
 		transform: translateY(0);
 	}
 
-	.scene {
+	.charts {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 16px;
-		min-width: 160px;
+		gap: 24px;
+		width: 100%;
 	}
 
-	.scene-label {
-		font-family: var(--font-sans);
-		font-size: var(--14px);
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: var(--color-gray-500);
+	.chart-wrapper {
+		flex: 1;
+		min-width: 0;
 	}
 
-	.object {
-		position: relative;
-		height: 120px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-end;
+	.chart-wrapper svg {
+		width: 100%;
+		height: auto;
+		display: block;
 	}
 
-	.flame {
-		border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-		transition: all 1.5s ease;
-	}
-
-	.candle-flame {
-		width: 12px;
-		height: 24px;
-		background: #f6ad55;
-		animation: flicker 0.3s ease-in-out infinite alternate;
-	}
-
-	.visible .candle-flame {
-		width: 4px;
-		height: 4px;
-		opacity: 0;
-		animation: none;
-		transition-delay: 0.5s;
-	}
-
-	.candle-body {
-		width: 16px;
-		height: 48px;
-		background: var(--color-gray-300);
-	}
-
-	.fire-flame {
-		width: 32px;
-		height: 48px;
-		background: #e53e3e;
-		box-shadow: 0 0 12px #e53e3e44;
-		animation: flicker 0.2s ease-in-out infinite alternate;
-	}
-
-	.visible .fire-flame {
-		width: 56px;
-		height: 80px;
-		background: #dd6b20;
-		box-shadow: 0 0 32px #dd6b2066, 0 0 64px #e53e3e33;
-		transition-delay: 0.5s;
-	}
-
-	.fire-body {
-		width: 40px;
-		height: 12px;
-		background: var(--color-gray-600);
-	}
-
-	.wind-label {
-		font-family: var(--font-mono, monospace);
-		font-size: var(--12px, 0.75rem);
-		color: var(--color-gray-400);
-		opacity: 0;
-		transition: opacity 0.5s ease 0.3s;
-	}
-
-	.visible .wind-label {
-		opacity: 1;
-	}
-
-	.outcome {
+	.chart-label {
 		font-family: var(--font-sans);
 		font-size: var(--14px);
 		font-weight: 700;
-		opacity: 0;
-		transition: opacity 0.5s ease 1.5s;
+		text-align: center;
+		margin-bottom: 4px;
 	}
 
-	.visible .outcome {
-		opacity: 1;
+	.replay {
+		font-family: var(--font-mono, monospace);
+		font-size: var(--12px, 0.75rem);
+		color: var(--color-gray-500);
+		background: none;
+		border: 1px solid var(--color-gray-300);
+		padding: 4px 16px;
+		cursor: pointer;
 	}
 
-	.fragile-outcome {
-		color: var(--color-fragile);
+	.replay:hover:not(:disabled) {
+		color: var(--color-fg);
+		border-color: var(--color-fg);
 	}
 
-	.antifragile-outcome {
-		color: var(--color-antifragile);
-	}
-
-	@keyframes flicker {
-		from { transform: scaleX(1) scaleY(1); }
-		to { transform: scaleX(0.9) scaleY(1.05); }
+	.replay:disabled {
+		cursor: default;
+		opacity: 0.5;
 	}
 
 	.message {
@@ -215,14 +279,15 @@
 		max-width: 540px;
 	}
 
+	@media (max-width: 500px) {
+		.charts {
+			flex-direction: column;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		.flame {
-			animation: none !important;
-		}
-		.figure, .wind-label, .outcome {
-			transition: none !important;
-		}
 		.figure {
+			transition: none;
 			opacity: 1;
 			transform: none;
 		}

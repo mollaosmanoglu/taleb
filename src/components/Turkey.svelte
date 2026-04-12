@@ -1,40 +1,52 @@
 <script>
 	// Section V — The Turkey
-	// Pattern: stepping (tap through days, line climbs, then cliff)
+	// Pattern: progressive SVG line draw with cliff drop
 	// Figure: graphical tour Fig 35 — inverse turkey problem
 	import inView from "$actions/inView.js";
+	import { line, area, curveBasis, scaleLinear } from "d3";
 
 	let visible = $state(false);
 	let day = $state(0);
 	let animating = $state(false);
 
-	// Build the confidence line — rises for 1000 days, crashes on 1001
-	const totalDays = 50; // visual steps (not literal 1000)
-	const width = 400;
-	const height = 200;
-	const margin = { top: 10, right: 10, bottom: 30, left: 40 };
-	const plotW = width - margin.left - margin.right;
-	const plotH = height - margin.top - margin.bottom;
+	const totalDays = 50;
+	const w = 460;
+	const h = 220;
+	const m = { top: 16, right: 16, bottom: 32, left: 48 };
+	const plotW = w - m.left - m.right;
+	const plotH = h - m.top - m.bottom;
 
-	function buildPath(upTo) {
-		let d = `M ${margin.left} ${margin.top + plotH}`;
-		for (let i = 1; i <= Math.min(upTo, totalDays); i++) {
-			const x = margin.left + (i / totalDays) * plotW;
-			// Confidence rises with diminishing noise
-			const noise = Math.sin(i * 1.7) * 3 * (1 - i / totalDays);
-			const y = margin.top + plotH - (i / totalDays) * plotH * 0.85 + noise;
-			d += ` L ${x} ${y}`;
-		}
-		// The cliff
-		if (upTo > totalDays) {
-			const lastX = margin.left + plotW;
-			d += ` L ${lastX} ${margin.top + plotH}`;
-		}
-		return d;
-	}
+	// Pre-compute the full dataset once (deterministic noise via sin)
+	const points = Array.from({ length: totalDays + 1 }, (_, i) => {
+		const noise = Math.sin(i * 1.7) * 3 * (1 - i / totalDays);
+		const confidence = (i / totalDays) * plotH * 0.85 - noise;
+		return { i, x: m.left + (i / totalDays) * plotW, y: m.top + plotH - confidence };
+	});
 
-	let path = $derived(buildPath(day));
+	const xScale = scaleLinear().domain([0, totalDays]).range([m.left, m.left + plotW]);
+	const yScale = scaleLinear().domain([0, 1]).range([m.top + plotH, m.top]);
+
+	const lineFn = line()
+		.x((d) => d.x)
+		.y((d) => d.y);
+
+	const areaFn = area()
+		.x((d) => d.x)
+		.y0(m.top + plotH)
+		.y1((d) => d.y);
+
+	// Derived paths based on current day
+	let visiblePoints = $derived(points.slice(0, Math.min(day + 1, totalDays + 1)));
+	let linePath = $derived(lineFn(visiblePoints));
+	let areaPath = $derived(areaFn(visiblePoints));
 	let isCliff = $derived(day > totalDays);
+
+	// Cliff line (drops from last point to baseline)
+	let cliffPath = $derived(() => {
+		if (!isCliff || visiblePoints.length === 0) return "";
+		const last = visiblePoints[visiblePoints.length - 1];
+		return `M ${last.x} ${last.y} L ${last.x} ${m.top + plotH}`;
+	});
 
 	function animate() {
 		if (animating) return;
@@ -66,47 +78,83 @@
 		use:inView
 		onenter={() => { visible = true; animate(); }}
 	>
-		<svg viewBox="0 0 {width} {height}" class="chart">
+		<svg viewBox="0 0 {w} {h}" class="chart">
 			<!-- axes -->
 			<line
-				x1={margin.left} y1={margin.top + plotH}
-				x2={margin.left + plotW} y2={margin.top + plotH}
+				x1={m.left} y1={m.top + plotH}
+				x2={m.left + plotW} y2={m.top + plotH}
 				stroke="var(--color-gray-300)" stroke-width="1"
 			/>
 			<line
-				x1={margin.left} y1={margin.top}
-				x2={margin.left} y2={margin.top + plotH}
+				x1={m.left} y1={m.top}
+				x2={m.left} y2={m.top + plotH}
 				stroke="var(--color-gray-300)" stroke-width="1"
 			/>
 
 			<!-- axis labels -->
-			<text x={margin.left + plotW / 2} y={height - 4}
+			<text x={m.left + plotW / 2} y={h - 6}
 				text-anchor="middle" fill="var(--color-gray-500)"
 				font-size="10" font-family="var(--font-sans)">
 				days
 			</text>
-			<text x={12} y={margin.top + plotH / 2}
+			<text x={14} y={m.top + plotH / 2}
 				text-anchor="middle" fill="var(--color-gray-500)"
 				font-size="10" font-family="var(--font-sans)"
-				transform="rotate(-90, 12, {margin.top + plotH / 2})">
+				transform="rotate(-90, 14, {m.top + plotH / 2})">
 				confidence
 			</text>
 
-			<!-- the line -->
-			<path
-				d={path}
-				fill="none"
-				stroke={isCliff ? "var(--color-fragile)" : "var(--color-fg)"}
-				stroke-width="2.5"
-				stroke-linejoin="round"
-			/>
+			<!-- shaded area under the confidence line -->
+			{#if visiblePoints.length > 1}
+				<path
+					d={areaPath}
+					fill="var(--color-gray-200)"
+					opacity={isCliff ? 0.6 : 0.3}
+					class="area"
+				/>
+			{/if}
 
-			<!-- thanksgiving marker -->
+			<!-- the confidence line -->
+			{#if visiblePoints.length > 1}
+				<path
+					d={linePath}
+					fill="none"
+					stroke="var(--color-fg)"
+					stroke-width="2.5"
+					stroke-linejoin="round"
+				/>
+			{/if}
+
+			<!-- the cliff drop -->
 			{#if isCliff}
-				<text x={margin.left + plotW - 4} y={margin.top + plotH - 8}
-					text-anchor="end" fill="var(--color-fragile)"
+				<path
+					d={cliffPath()}
+					fill="none"
+					stroke="var(--color-fragile)"
+					stroke-width="2.5"
+					stroke-dasharray="4 3"
+				/>
+
+				<!-- thanksgiving label -->
+				<text x={points[totalDays].x + 4} y={m.top + plotH / 2}
+					fill="var(--color-fragile)"
 					font-size="11" font-weight="700" font-family="var(--font-sans)">
 					Thanksgiving
+				</text>
+
+				<!-- unseen label -->
+				<text x={points[totalDays].x} y={m.top + plotH + 16}
+					text-anchor="middle" fill="var(--color-fragile)"
+					font-size="9" font-family="var(--font-sans)"
+					opacity="0.8">
+					unseen
+				</text>
+
+				<!-- "what the turkey saw" label -->
+				<text x={m.left + plotW * 0.4} y={m.top + plotH - 16}
+					text-anchor="middle" fill="var(--color-gray-500)"
+					font-size="9" font-style="italic" font-family="var(--font-sans)">
+					what the turkey saw
 				</text>
 			{/if}
 		</svg>
@@ -178,6 +226,10 @@
 		width: 100%;
 		max-width: 500px;
 		height: auto;
+	}
+
+	.area {
+		transition: opacity 0.5s ease;
 	}
 
 	.replay {

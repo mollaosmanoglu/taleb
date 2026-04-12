@@ -1,12 +1,15 @@
 <script>
 	// Section II — Between Damocles and Hydra
-	// Pattern: stepping (tap through three states)
-	// Figure: graphical tour Fig 22 — four payoff shapes
+	// Pattern: stepping with morphing SVG distribution curve
+	// Figure: graphical tour Fig 22 — four probability distribution shapes
 	import ToggleGroup from "$components/ui/ToggleGroup.svelte";
 	import inView from "$actions/inView.js";
+	import { tweened } from "svelte/motion";
+	import { cubicOut } from "svelte/easing";
+	import { line, area, scaleLinear, curveBasis } from "d3";
+	import { generateCurve } from "$utils/gaussian.js";
 
 	let visible = $state(false);
-
 	let active = $state("damocles");
 
 	const items = [
@@ -15,25 +18,71 @@
 		{ value: "hydra", label: "Hydra" }
 	];
 
-	const states = {
+	const stateConfig = {
 		damocles: {
 			label: "Fragile",
-			description: "A sword hangs by a single hair above his head. One small shock and it's over.",
-			color: "var(--color-fragile)"
+			description: "Fat left tail. Large losses lurk unseen.",
+			color: "var(--color-fragile)",
+			mu: 0.3, sigma: 1, alpha: -3
 		},
 		phoenix: {
 			label: "Robust",
-			description: "It burns and returns unchanged. Shocks don't help, but they don't hurt either.",
-			color: "var(--color-robust)"
+			description: "Symmetric. Small variations, no surprises.",
+			color: "var(--color-robust)",
+			mu: 0, sigma: 0.8, alpha: 0
 		},
 		hydra: {
 			label: "Antifragile",
-			description: "Cut one head, two grow back. It needs the damage to become stronger.",
-			color: "var(--color-antifragile)"
+			description: "Fat right tail. Large gains possible.",
+			color: "var(--color-antifragile)",
+			mu: -0.3, sigma: 1, alpha: 3
 		}
 	};
 
-	let current = $derived(states[active]);
+	let current = $derived(stateConfig[active]);
+
+	// SVG dimensions
+	const w = 420;
+	const h = 200;
+	const m = { top: 16, right: 16, bottom: 32, left: 16 };
+	const plotW = w - m.left - m.right;
+	const plotH = h - m.top - m.bottom;
+	const nPoints = 80;
+
+	const xScale = scaleLinear().domain([-4, 4]).range([m.left, m.left + plotW]);
+	const yScale = scaleLinear().domain([0, 1.1]).range([m.top + plotH, m.top]);
+
+	// Tweened y-values for smooth morphing
+	const initialCurve = generateCurve(0, 0.8, 0, nPoints, [-4, 4]);
+	const tweenedY = tweened(
+		initialCurve.map((p) => p.y),
+		{ duration: 400, easing: cubicOut }
+	);
+
+	// Update tweened data when toggle changes
+	$effect(() => {
+		const cfg = stateConfig[active];
+		const newCurve = generateCurve(cfg.mu, cfg.sigma, cfg.alpha, nPoints, [-4, 4]);
+		tweenedY.set(newCurve.map((p) => p.y));
+	});
+
+	// Build paths from tweened y-values
+	let curvePoints = $derived(
+		$tweenedY.map((y, i) => ({
+			x: -4 + (i / nPoints) * 8,
+			y
+		}))
+	);
+
+	const lineFn = line().x((d) => xScale(d.x)).y((d) => yScale(d.y)).curve(curveBasis);
+	const areaFn = area()
+		.x((d) => xScale(d.x))
+		.y0(m.top + plotH)
+		.y1((d) => yScale(d.y))
+		.curve(curveBasis);
+
+	let curvePath = $derived(lineFn(curvePoints));
+	let curveArea = $derived(areaFn(curvePoints));
 </script>
 
 <section id="hydra" class:visible use:inView onenter={() => (visible = true)}>
@@ -49,7 +98,35 @@
 		<div class="toggle-row">
 			<ToggleGroup {items} bind:value={active} required={true} />
 		</div>
-		<div class="state-display" style:border-color={current.color}>
+
+		<svg viewBox="0 0 {w} {h}" class="chart">
+			<!-- x-axis -->
+			<line x1={m.left} y1={m.top + plotH} x2={m.left + plotW} y2={m.top + plotH}
+				stroke="var(--color-gray-300)" stroke-width="1" />
+			<!-- center line -->
+			<line x1={xScale(0)} y1={m.top} x2={xScale(0)} y2={m.top + plotH}
+				stroke="var(--color-gray-200)" stroke-width="1" stroke-dasharray="3 3" />
+			<!-- axis labels -->
+			<text x={m.left + plotW / 2} y={h - 6} text-anchor="middle"
+				fill="var(--color-gray-500)" font-size="10" font-family="var(--font-sans)">
+				Outcomes
+			</text>
+			<text x={m.left} y={h - 6}
+				fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
+				losses
+			</text>
+			<text x={m.left + plotW} y={h - 6} text-anchor="end"
+				fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
+				gains
+			</text>
+
+			<!-- filled area -->
+			<path d={curveArea} fill={current.color} opacity="0.15" />
+			<!-- curve line -->
+			<path d={curvePath} fill="none" stroke={current.color} stroke-width="2.5" />
+		</svg>
+
+		<div class="state-info">
 			<p class="state-label" style:color={current.color}>{current.label}</p>
 			<p class="state-desc">{current.description}</p>
 		</div>
@@ -80,14 +157,6 @@
 		transform: translateY(0);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		section {
-			transition: none;
-			opacity: 1;
-			transform: none;
-		}
-	}
-
 	.number {
 		font-family: var(--font-sans);
 		font-size: var(--14px);
@@ -114,11 +183,10 @@
 	}
 
 	.figure {
-		min-height: 320px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 32px;
+		gap: 24px;
 		margin-bottom: 48px;
 	}
 
@@ -127,27 +195,27 @@
 		justify-content: center;
 	}
 
-	.state-display {
-		border: 2px solid;
-		padding: 32px;
-		text-align: center;
+	.chart {
 		width: 100%;
-		max-width: 400px;
-		transition: border-color 0.3s ease;
+		max-width: 500px;
+		height: auto;
+	}
+
+	.state-info {
+		text-align: center;
 	}
 
 	.state-label {
 		font-family: var(--font-sans);
-		font-size: var(--24px, 1.5rem);
+		font-size: var(--20px);
 		font-weight: 700;
-		margin-bottom: 12px;
+		margin-bottom: 4px;
 		transition: color 0.3s ease;
 	}
 
 	.state-desc {
-		font-size: var(--16px, 1rem);
-		line-height: 1.6;
-		color: var(--color-gray-700);
+		font-size: var(--14px);
+		color: var(--color-gray-600);
 	}
 
 	.message {
@@ -155,5 +223,13 @@
 		line-height: 1.6;
 		color: var(--color-gray-800);
 		max-width: 540px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		section {
+			transition: none;
+			opacity: 1;
+			transform: none;
+		}
 	}
 </style>
