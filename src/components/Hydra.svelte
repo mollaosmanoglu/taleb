@@ -161,7 +161,7 @@
 			<!-- tail annotation arrow -->
 			{#if active === "damocles"}
 				<g class="annotation" style="transition: opacity 0.4s ease;">
-					<line x1={xScale(-2.5)} y1={m.top + 16} x2={xScale(-3.2)} y2={m.top + plotH - 20}
+					<line x1={xScale(-2.5)} y1={m.top + 16} x2={xScale(-1.8)} y2={m.top + plotH - 20}
 						stroke="var(--color-fragile)" stroke-width="1" stroke-dasharray="3 2" />
 					<text x={xScale(-2.5)} y={m.top + 10} text-anchor="middle"
 						fill="var(--color-fragile)" font-size="8" font-weight="700"
@@ -171,7 +171,7 @@
 				</g>
 			{:else if active === "hydra"}
 				<g class="annotation" style="transition: opacity 0.4s ease;">
-					<line x1={xScale(2.5)} y1={m.top + 16} x2={xScale(3.2)} y2={m.top + plotH - 20}
+					<line x1={xScale(2.5)} y1={m.top + 16} x2={xScale(1.8)} y2={m.top + plotH - 20}
 						stroke="var(--color-antifragile)" stroke-width="1" stroke-dasharray="3 2" />
 					<text x={xScale(2.5)} y={m.top + 10} text-anchor="middle"
 						fill="var(--color-antifragile)" font-size="8" font-weight="700"
