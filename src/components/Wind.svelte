@@ -2,8 +2,12 @@
 	// Section I — How to Love the Wind
 	// Pattern: two side-by-side SVG time series, progressive draw
 	// Figure: graphical tour Fig 20 + 21 — fragile blowup vs antifragile spike
+	import { getContext } from "svelte";
 	import inView from "$actions/inView.js";
 	import { line, scaleLinear } from "d3";
+
+	const copy = getContext("copy");
+	const section = copy.sections[0];
 
 	let visible = $state(false);
 	let frame = $state(0);
@@ -77,19 +81,12 @@
 </script>
 
 <section id="wind">
-	<p class="number">I</p>
-	<h2>How to Love the Wind</h2>
-	<p class="parable">
-		Wind extinguishes a candle and energizes fire.
-	</p>
-	<p class="body">
-		Same force. Opposite outcome. The candle needs calm — it's
-		fragile. The fire feeds on the very thing that kills the candle.
-	</p>
-	<p class="body">
-		Watch two systems hit by the same shock. One collapses. The other
-		thrives.
-	</p>
+	<p class="number">{section.number}</p>
+	<h2>{section.title}</h2>
+	<p class="parable">{section.parable}</p>
+	{#each section.body as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<div
 		class="figure"
@@ -168,9 +165,7 @@
 		</button>
 	</div>
 
-	<p class="message">
-		There is a third category, and you've never named it.
-	</p>
+	<p class="message">{section.message}</p>
 </section>
 
 <style>

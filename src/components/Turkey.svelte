@@ -2,8 +2,12 @@
 	// Section V — The Turkey
 	// Pattern: progressive SVG line draw with cliff drop
 	// Figure: graphical tour Fig 35 — inverse turkey problem
+	import { getContext } from "svelte";
 	import inView from "$actions/inView.js";
 	import { line, area, curveBasis, scaleLinear } from "d3";
+
+	const copy = getContext("copy");
+	const section = copy.sections[5];
 
 	let visible = $state(false);
 	let day = $state(0);
@@ -68,22 +72,12 @@
 </script>
 
 <section id="turkey">
-	<p class="number">VI</p>
-	<h2>The Turkey</h2>
-	<p class="parable">
-		A turkey is fed every day for a thousand days. Every feeding
-		confirms — with increasing statistical confidence — that
-		butchers love turkeys.
-	</p>
-	<p class="body">
-		Day 1,001 is Thanksgiving.
-	</p>
-	<p class="body">
-		Confidence was maximal at the precise moment risk was highest.
-		The turkey confused absence of evidence of harm with evidence of
-		absence of harm. Stable history was not safety. It was a trap
-		building in silence.
-	</p>
+	<p class="number">{section.number}</p>
+	<h2>{section.title}</h2>
+	<p class="parable">{section.parable}</p>
+	{#each section.body as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<div
 		class="figure"
@@ -177,9 +171,7 @@
 		</button>
 	</div>
 
-	<p class="message">
-		What you've never seen is exactly what's coming.
-	</p>
+	<p class="message">{section.message}</p>
 </section>
 
 <style>

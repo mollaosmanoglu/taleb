@@ -2,8 +2,12 @@
 	// Section III — Stone and Pebbles
 	// Pattern: scrollytelling with sticky SVG concavity curve
 	// Figure: graphical tour Fig 28 — harm vs size of stone
+	import { getContext } from "svelte";
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import { line, area, scaleLinear, curveBasis } from "d3";
+
+	const copy = getContext("copy");
+	const section = copy.sections[2];
 
 	let value = $state(undefined);
 
@@ -41,14 +45,7 @@
 	const fullCurvePath = harmLine(curveData);
 	const linearPath = linearLine(curveData);
 
-	// Scroll steps — each maps to a position on the curve
-	const steps = [
-		{ size: 5, text: "A pebble. Barely a scratch. Harm is proportional." },
-		{ size: 20, text: "A handful of stones. The bruise is already worse than four scratches." },
-		{ size: 45, text: "A heavy rock. Harm accelerates — it's no longer proportional." },
-		{ size: 70, text: "A boulder. The curve bends hard. Damage compounds." },
-		{ size: 95, text: "One massive stone. Near maximum harm. Concavity is the trap." }
-	];
+	const steps = section.steps;
 
 	let stepIndex = $derived(value ?? 0);
 	let currentSize = $derived(steps[stepIndex]?.size ?? 5);
@@ -62,23 +59,12 @@
 </script>
 
 <section id="stone">
-	<p class="number">III</p>
-	<h2>Stone and Pebbles</h2>
-	<p class="parable">
-		A king swore he would crush his son with a stone. After he calmed
-		down, he was in trouble — a king who breaks an oath is unfit to
-		rule.
-	</p>
-	<p class="body">
-		His advisor found a solution: cut the stone into a thousand
-		pebbles.
-	</p>
-	<p class="body">
-		Same total weight. Completely different harm. A ten-pound stone
-		hurts more than twice as much as a five-pound stone, more than
-		five times a two-pound stone. Harm isn't proportional — it
-		accelerates. Scroll through to see it.
-	</p>
+	<p class="number">{section.number}</p>
+	<h2>{section.title}</h2>
+	<p class="parable">{section.parable}</p>
+	{#each section.body as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<div class="scrolly-container">
 		<div class="sticky-figure">
@@ -149,9 +135,7 @@
 		</div>
 	</div>
 
-	<p class="message">
-		Size matters more than frequency. Concavity is the trap.
-	</p>
+	<p class="message">{section.message}</p>
 </section>
 
 <style>

@@ -2,8 +2,12 @@
 	// Section IV — Naive Intervention
 	// Pattern: toggle between "intervene" and "do nothing"
 	// Figure: Fig 31 — iatrogenics probability distribution
+	import { getContext } from "svelte";
 	import inView from "$actions/inView.js";
 	import { line, area, scaleLinear, curveBasis } from "d3";
+
+	const copy = getContext("copy");
+	const section = copy.sections[3];
 
 	let visible = $state(false);
 
@@ -47,28 +51,16 @@
 	const iatroPath = lineFn(iatroData);
 	const iatroArea = areaFn(iatroData);
 
-	// Via negativa list
-	const subtractions = [
-		{ add: "More medicine", sub: "Remove the harmful" },
-		{ add: "More regulation", sub: "Remove rent-seekers" },
-		{ add: "More advice", sub: "Remove fragilities" },
-		{ add: "More complexity", sub: "Remove layers" }
-	];
+	const subtractions = section.subtractions;
 </script>
 
 <section id="intervention" class:visible use:inView onenter={() => (visible = true)}>
-	<p class="number">IV</p>
-	<h2>Naive Intervention</h2>
-	<p class="parable">
-		A doctor treats a mild headache. The headache goes away. A year
-		later the patient returns with liver failure.
-	</p>
-	<p class="body">
-		The Greeks had a word for this: iatrogenics — harm caused by the
-		healer. The concept applies everywhere. Governments intervene in
-		economies. Managers intervene in teams. The urge to "do something"
-		is often the most dangerous thing of all.
-	</p>
+	<p class="number">{section.number}</p>
+	<h2>{section.title}</h2>
+	<p class="parable">{section.parable}</p>
+	{#each section.body as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<!-- Figure 1: Iatrogenics (Fig 31) — two overlapping distributions -->
 	<div class="figure">
@@ -130,16 +122,12 @@
 				stroke="var(--color-gray-400)" stroke-width="0.8" />
 		</svg>
 
-		<p class="figure-caption">
-			The benefit is visible and certain. The harm is hidden and
-			catastrophic. The orange area exceeds the blue.
-		</p>
+		<p class="figure-caption">{section.figureCaption}</p>
 	</div>
 
-	<p class="body">
-		The cure has a name: via negativa. Don't ask what to add. Ask
-		what to remove.
-	</p>
+	{#each section.bodyAfter as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<!-- Figure 2: Via Negativa — subtraction table -->
 	<div class="negativa">
@@ -157,9 +145,7 @@
 		</div>
 	</div>
 
-	<p class="message">
-		The first decision is not what to do. It's what to stop doing.
-	</p>
+	<p class="message">{section.message}</p>
 </section>
 
 <style>

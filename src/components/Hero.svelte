@@ -1,7 +1,9 @@
 <script>
 	// Hero — the question that opens the essay
+	import { getContext } from "svelte";
 	import inView from "$actions/inView.js";
 
+	const copy = getContext("copy");
 	let visible = $state(false);
 </script>
 
@@ -18,20 +20,12 @@
 </a>
 
 <header class="hero" class:visible use:inView onenter={() => (visible = true)}>
-	<p class="kicker">A visual essay on Nassim Taleb's <em>Antifragile</em></p>
-	<h1>What is the opposite of fragile?</h1>
-	<p class="dek">
-		Most people answer "robust." It isn't.
-	</p>
-	<p class="intro">
-		English doesn't have the word. Taleb had to coin it. The thing
-		he named is behind everything that has changed with time:
-		evolution, culture, ideas, political systems, your own career.
-	</p>
-	<p class="intro">
-		Some things benefit from shocks. Not just resist them — actually
-		get better. Six parables, nine figures. Scroll.
-	</p>
+	<p class="kicker">{@html copy.hero.kicker}</p>
+	<h1>{copy.hero.title}</h1>
+	<p class="dek">{copy.hero.dek}</p>
+	{#each copy.hero.intro as text}
+		<p class="intro">{text}</p>
+	{/each}
 </header>
 
 <style>

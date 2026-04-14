@@ -2,8 +2,12 @@
 	// Section II — Between Damocles and Hydra
 	// Pattern: stepping with morphing SVG distribution curve
 	// Figure: graphical tour Fig 22 — four probability distribution shapes
+	import { getContext } from "svelte";
 	import ToggleGroup from "$components/ui/ToggleGroup.svelte";
 	import inView from "$actions/inView.js";
+
+	const copy = getContext("copy");
+	const section = copy.sections[1];
 	import { tweened } from "svelte/motion";
 	import { cubicOut } from "svelte/easing";
 	import { line, area, scaleLinear, curveBasis } from "d3";
@@ -86,45 +90,27 @@
 </script>
 
 <section id="hydra" class:visible use:inView onenter={() => (visible = true)}>
-	<p class="number">II</p>
-	<h2>Between Damocles and Hydra</h2>
-	<p class="parable">
-		Damocles dines under a sword suspended by a single horsehair.
-		One gust and it drops.
-	</p>
-	<p class="body">
-		The Phoenix burns to ash and is reborn, unchanged. The Hydra,
-		when you cut off one head, grows back two. Three characters,
-		three responses to the same force.
-	</p>
+	<p class="number">{section.number}</p>
+	<h2>{section.title}</h2>
+	<p class="parable">{section.parable}</p>
+	{#each section.body as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<!-- Figure 1: The Triad (Taleb's Table 1) -->
 	<div class="triad">
-		<div class="triad-col" style:border-color="var(--color-fragile)">
-			<p class="triad-icon">🥂</p>
-			<p class="triad-name" style:color="var(--color-fragile)">Fragile</p>
-			<p class="triad-desc">Hates volatility. Harmed by shocks. Needs calm.</p>
-		</div>
-		<div class="triad-col" style:border-color="var(--color-robust)">
-			<p class="triad-icon">🔥</p>
-			<p class="triad-name" style:color="var(--color-robust)">Robust</p>
-			<p class="triad-desc">Indifferent to volatility. Neither helped nor harmed.</p>
-		</div>
-		<div class="triad-col" style:border-color="var(--color-antifragile)">
-			<p class="triad-icon">🐉</p>
-			<p class="triad-name" style:color="var(--color-antifragile)">Antifragile</p>
-			<p class="triad-desc">Loves volatility. Gains from disorder. Grows stronger.</p>
-		</div>
+		{#each section.triad as col}
+			<div class="triad-col" style:border-color="var(--color-{col.color})">
+				<p class="triad-icon">{col.icon}</p>
+				<p class="triad-name" style:color="var(--color-{col.color})">{col.name}</p>
+				<p class="triad-desc">{col.description}</p>
+			</div>
+		{/each}
 	</div>
 
-	<p class="body">
-		English has words for the first two — but not the third. Gaining
-		from disorder needed a new word.
-	</p>
-	<p class="body">
-		Toggle between the three. Watch how the shape of possible
-		outcomes changes.
-	</p>
+	{#each section.bodyAfter as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<!-- Figure 2: Morphing distribution curve -->
 	<div class="figure">
@@ -188,9 +174,7 @@
 		</div>
 	</div>
 
-	<p class="message">
-		Fragile, robust, antifragile. The third is the one that grows.
-	</p>
+	<p class="message">{section.message}</p>
 </section>
 
 <style>

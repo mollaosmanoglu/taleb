@@ -1,12 +1,13 @@
 <script>
 	// Credits footer
+	import { getContext } from "svelte";
+	const copy = getContext("copy");
 </script>
 
 <footer>
-	<p>
-		Concepts, parables, and figures by Nassim Nicholas Taleb,
-		<em>Antifragile: Things That Gain From Disorder</em> (Random House, 2012).
-	</p>
+	{#each copy.credits as line}
+		<p>{@html line}</p>
+	{/each}
 </footer>
 
 <style>

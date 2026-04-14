@@ -3,8 +3,12 @@
 	// Pattern: slider-driven convexity payoff (concave vs convex)
 	// Figure: convex = antifragile (limited downside, unlimited upside)
 	//         concave = fragile (limited upside, unlimited downside)
+	import { getContext } from "svelte";
 	import Slider from "$components/ui/Slider.svelte";
 	import inView from "$actions/inView.js";
+
+	const copy = getContext("copy");
+	const section = copy.sections[4];
 	import { line, area, scaleLinear, curveBasis } from "d3";
 
 	let visible = $state(false);
@@ -116,22 +120,16 @@
 </script>
 
 <section id="tony" class:visible use:inView onenter={() => (visible = true)}>
-	<p class="number">V</p>
-	<h2>Fat Tony</h2>
-	<p class="parable">
-		Fat Tony is a trader from Brooklyn who makes his living from
-		other people's blindness.
-	</p>
-	<p class="body">
-		He doesn't predict. He positions. During the run-up to the Iraq
-		war, he noticed the market priced oil as if nothing would happen.
-		So he bought options — contracts that cost almost nothing if he
-		was wrong, and paid enormously if he was right.
-	</p>
+	<p class="number">{section.number}</p>
+	<h2>{section.title}</h2>
+	<p class="parable">{section.parable}</p>
+	{#each section.body as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<!-- Figure 1: The Barbell (Fig 24) -->
 	<div class="figure">
-		<p class="figure-label">The barbell: floor your losses, keep the upside open</p>
+		<p class="figure-label">{section.figureLabel}</p>
 		<svg viewBox="0 0 {bbW} {bbH}" class="chart">
 			<line x1={bbM.left} y1={bbM.top + bbPlotH} x2={bbM.left + bbPlotW} y2={bbM.top + bbPlotH}
 				stroke="var(--color-gray-300)" stroke-width="1" />
@@ -159,14 +157,9 @@
 		</svg>
 	</div>
 
-	<p class="body">
-		$300,000 became $18 million. Not because he predicted the war.
-		Because he didn't need to.
-	</p>
-	<p class="body">
-		Drag the slider. Watch what happens to the two positions as
-		shocks grow.
-	</p>
+	{#each section.bodyAfter as text}
+		<p class="body">{text}</p>
+	{/each}
 
 	<!-- Figure 2: Convexity payoff (Fig 26-27) -->
 	<div class="figure">
@@ -255,18 +248,16 @@
 
 		<p class="insight">
 			{#if shock < 20}
-				Small shocks — both payoffs are similar. No visible difference.
+				{section.insights.small}
 			{:else if shock < 50}
-				The curves diverge. The convex position gains more than it loses. The concave one loses more than it gains.
+				{section.insights.moderate}
 			{:else}
-				Large shock — the convex payoff explodes upward while the concave one collapses. This is why Fat Tony bets on volatility.
+				{section.insights.large}
 			{/if}
 		</p>
 	</div>
 
-	<p class="message">
-		Don't predict. Position. Cap the downside, leave the upside open.
-	</p>
+	<p class="message">{section.message}</p>
 </section>
 
 <style>

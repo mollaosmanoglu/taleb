@@ -2,5 +2,120 @@
 	"title": "lindy.design",
 	"description": "Timeless ideas, explained through timeless design. Visual essays exploring concepts that have stood—and will stand—the test of time.",
 	"url": "https://lindy.design",
-	"keywords": "visual essays, lindy effect, timeless design, nassim taleb, data visualization, design thinking"
+	"keywords": "visual essays, lindy effect, timeless design, nassim taleb, data visualization, design thinking",
+	"hero": {
+		"kicker": "A visual essay on Nassim Taleb's <em>Antifragile</em>",
+		"title": "What is the opposite of fragile?",
+		"dek": "Most people answer \"robust.\" It isn't.",
+		"intro": [
+			"English doesn't have the word. Taleb had to coin it. The thing he named is behind everything that has changed with time: evolution, culture, ideas, political systems, your own career.",
+			"Some things benefit from shocks. Not just resist them — actually get better. Six parables, nine figures. Scroll."
+		]
+	},
+	"sections": [
+		{
+			"id": "wind",
+			"number": "I",
+			"title": "How to Love the Wind",
+			"parable": "Wind extinguishes a candle and energizes fire.",
+			"body": [
+				"Same force. Opposite outcome. The candle needs calm — it's fragile. The fire feeds on the very thing that kills the candle.",
+				"Watch two systems hit by the same shock. One collapses. The other thrives."
+			],
+			"message": "There is a third category, and you've never named it."
+		},
+		{
+			"id": "hydra",
+			"number": "II",
+			"title": "Between Damocles and Hydra",
+			"parable": "Damocles dines under a sword suspended by a single horsehair. One gust and it drops.",
+			"body": [
+				"The Phoenix burns to ash and is reborn, unchanged. The Hydra, when you cut off one head, grows back two. Three characters, three responses to the same force."
+			],
+			"triad": [
+				{ "icon": "🥂", "name": "Fragile", "color": "fragile", "description": "Hates volatility. Harmed by shocks. Needs calm." },
+				{ "icon": "🔥", "name": "Robust", "color": "robust", "description": "Indifferent to volatility. Neither helped nor harmed." },
+				{ "icon": "🐉", "name": "Antifragile", "color": "antifragile", "description": "Loves volatility. Gains from disorder. Grows stronger." }
+			],
+			"bodyAfter": [
+				"English has words for the first two — but not the third. Gaining from disorder needed a new word.",
+				"Toggle between the three. Watch how the shape of possible outcomes changes."
+			],
+			"message": "Fragile, robust, antifragile. The third is the one that grows."
+		},
+		{
+			"id": "stone",
+			"number": "III",
+			"title": "Stone and Pebbles",
+			"parable": "A king swore he would crush his son with a stone. After he calmed down, he was in trouble — a king who breaks an oath is unfit to rule.",
+			"body": [
+				"His advisor found a solution: cut the stone into a thousand pebbles.",
+				"Same total weight. Completely different harm. A ten-pound stone hurts more than twice as much as a five-pound stone, more than five times a two-pound stone. Harm isn't proportional — it accelerates. Scroll through to see it."
+			],
+			"steps": [
+				{ "size": 5, "text": "A pebble. Barely a scratch. Harm is proportional." },
+				{ "size": 20, "text": "A handful of stones. The bruise is already worse than four scratches." },
+				{ "size": 45, "text": "A heavy rock. Harm accelerates — it's no longer proportional." },
+				{ "size": 70, "text": "A boulder. The curve bends hard. Damage compounds." },
+				{ "size": 95, "text": "One massive stone. Near maximum harm. Concavity is the trap." }
+			],
+			"message": "Size matters more than frequency. Concavity is the trap."
+		},
+		{
+			"id": "intervention",
+			"number": "IV",
+			"title": "Naive Intervention",
+			"parable": "A doctor treats a mild headache. The headache goes away. A year later the patient returns with liver failure.",
+			"body": [
+				"The Greeks had a word for this: iatrogenics — harm caused by the healer. The concept applies everywhere. Governments intervene in economies. Managers intervene in teams. The urge to \"do something\" is often the most dangerous thing of all."
+			],
+			"figureCaption": "The benefit is visible and certain. The harm is hidden and catastrophic. The orange area exceeds the blue.",
+			"bodyAfter": [
+				"The cure has a name: via negativa. Don't ask what to add. Ask what to remove."
+			],
+			"subtractions": [
+				{ "add": "More medicine", "sub": "Remove the harmful" },
+				{ "add": "More regulation", "sub": "Remove rent-seekers" },
+				{ "add": "More advice", "sub": "Remove fragilities" },
+				{ "add": "More complexity", "sub": "Remove layers" }
+			],
+			"message": "The first decision is not what to do. It's what to stop doing."
+		},
+		{
+			"id": "tony",
+			"number": "V",
+			"title": "Fat Tony",
+			"parable": "Fat Tony is a trader from Brooklyn who makes his living from other people's blindness.",
+			"body": [
+				"He doesn't predict. He positions. During the run-up to the Iraq war, he noticed the market priced oil as if nothing would happen. So he bought options — contracts that cost almost nothing if he was wrong, and paid enormously if he was right."
+			],
+			"figureLabel": "The barbell: floor your losses, keep the upside open",
+			"bodyAfter": [
+				"$300,000 became $18 million. Not because he predicted the war. Because he didn't need to.",
+				"Drag the slider. Watch what happens to the two positions as shocks grow."
+			],
+			"insights": {
+				"small": "Small shocks — both payoffs are similar. No visible difference.",
+				"moderate": "The curves diverge. The convex position gains more than it loses. The concave one loses more than it gains.",
+				"large": "Large shock — the convex payoff explodes upward while the concave one collapses. This is why Fat Tony bets on volatility."
+			},
+			"message": "Don't predict. Position. Cap the downside, leave the upside open."
+		},
+		{
+			"id": "turkey",
+			"number": "VI",
+			"title": "The Turkey",
+			"parable": "A turkey is fed every day for a thousand days. Every feeding confirms — with increasing statistical confidence — that butchers love turkeys.",
+			"body": [
+				"Day 1,001 is Thanksgiving.",
+				"Confidence was maximal at the precise moment risk was highest. The turkey confused absence of evidence of harm with evidence of absence of harm. Stable history was not safety. It was a trap building in silence."
+			],
+			"message": "What you've never seen is exactly what's coming."
+		}
+	],
+	"credits": [
+		"Based on the work of Nassim Nicholas Taleb.",
+		"Taleb, N. N. (2012). <em>Antifragile: Things That Gain From Disorder.</em> New York: Random House. ISBN 978-0-8129-7968-8.",
+		"Taleb, N. N. (2020). <em>Statistical Consequences of Fat Tails: Real World Preasymptotics, Epistemology, and Applications.</em> STEM Academic Press. ISBN 978-1-5445-0805-4."
+	]
 }
