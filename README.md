@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![D3](https://img.shields.io/badge/D3-v7-F9A03C)
 
-Interactive visual essay on Nassim Taleb's *Antifragile*. Convexity, barbell payoffs, and fat-tailed distributions rendered as scrollytelling figures. Inspired by [The Pudding](https://pudding.cool).
+Interactive visual essay on Nassim Taleb's *Antifragile*. Six parables, nine figures — convexity, barbell payoffs, fat-tailed distributions, and iatrogenics rendered as scrollytelling figures. Inspired by [The Pudding](https://pudding.cool).
 
 <p align="center">
   <img src="docs/screenshot.png" alt="Visual essay preview" width="800"/>
@@ -18,29 +18,28 @@ Interactive visual essay on Nassim Taleb's *Antifragile*. Convexity, barbell pay
 
 > **What is the opposite of fragile?**
 
-Most readers answer "robust." It isn't. The English language is missing
+Most people say "robust." It isn't. The English language is missing
 the word — Taleb had to coin it. This essay walks through the missing
-word in five of his own parables.
+word in six of his own parables.
 
-## The five parables
+## The six parables
 
-Pudding's playbook (character first, principle second), applied to
-Taleb's parables, anchored to figures from his own
-[graphical tour of the book](https://www.fooledbyrandomness.com/graphicaltour.pdf).
-
-| # | Parable | Taleb's figure | Pattern |
+| # | Parable | Concept | Pattern |
 |---|---|---|---|
-| 1 | How to Love the Wind | Fig 21 — robust vs antifragile time series | Stacked |
-| 2 | Between Damocles and Hydra | Fig 22 — four payoff shapes | Stepping |
-| 3 | Stone and Pebbles | Fig 28 — concavity at scale | Scrollytelling |
-| 4 | Fat Tony | Fig 24 + 26 — barbell, asymmetric payoff | Scrollytelling |
-| 5 | The Turkey | Fig 35 — inverse turkey problem | Stepping |
+| I | How to Love the Wind | Fragile vs antifragile time series | Side-by-side progressive draw |
+| II | Between Damocles and Hydra | The triad + fat-tailed distributions | Toggle + morphing curve |
+| III | Stone and Pebbles | Nonlinear harm (concavity) | Scrollytelling |
+| IV | Naive Intervention | Iatrogenics + via negativa | Static dual distribution |
+| V | Fat Tony | Barbell strategy + convex payoff | Slider-driven curves |
+| VI | The Turkey | Inverse turkey problem | Progressive draw + cliff |
+
+## Editing prose
+
+All essay text lives in [`src/data/copy.json`](src/data/copy.json). Edit that file and hot reload updates the browser — no need to touch Svelte components.
 
 ## Project docs
 
 - [PROJECT.md](PROJECT.md) — scope, working order, non-goals
-- [docs/pudding/](docs/pudding/) — local copies of The Pudding's three-part
-  guide and their idea-to-essay chronology
 
 ## Development
 
@@ -62,72 +61,23 @@ bun run dev
 
 ## Architecture
 
-```
-[User Input]                    [System Boundary: lindy.design]              [Content]
+Single-page scroll essay. All sections render on one route (`/`).
 
-┌──────────────┐                                                         ┌───────────────┐
-│   Browser    │                                                         │ Taleb's       │
-│ (Scrolling)  │                                                         │ Antifragile   │
-│              │                                                         │ Figures       │
-└──────┬───────┘                                                         │ (PDF data)    │
-       │                                                                 └───────┬───────┘
-       │ Scroll Events                                                           │
-       │                                                                         │
-       ▼                                                                         │
-┌─────────────────────────────────────────────────────────────────────┐         │
-│                      SvelteKit (Svelte 5)                            │         │
-│                                                                      │         │
-│  ┌──────────────────────────────────────────────────────────────┐   │         │
-│  │                   Route Structure                            │   │         │
-│  │                                                              │   │         │
-│  │  /            → Landing page                                 │   │         │
-│  │  /wind        → Parable 1 (Fig 21)                           │   │         │
-│  │  /hydra       → Parable 2 (Fig 22)                           │   │         │
-│  │  /stone       → Parable 3 (Fig 28)                           │   │         │
-│  │  /tony        → Parable 4 (Fig 24 + 26)                      │   │         │
-│  │  /turkey      → Parable 5 (Fig 35)                           │   │         │
-│  └──────────────┬───────────────────────────────────────────────┘   │         │
-│                 │                                                    │         │
-│                 ▼                                                    │         │
-│  ┌──────────────────────────────────────────────────────────────┐   │         │
-│  │              Component Layer                                 │   │         │
-│  │                                                              │   │         │
-│  │  ┌─────────────────────────────────────────────────────┐     │   │         │
-│  │  │        Scrollytelling Components                    │     │   │         │
-│  │  │                                                     │     │   │         │
-│  │  │  Hero.svelte        → Introduction                  │     │   │◀────────┘
-│  │  │  Wind.svelte        → Time series (stacked)         │     │   │ D3 Data
-│  │  │  Hydra.svelte       → Payoff shapes (stepping)      │     │   │
-│  │  │  Stone.svelte       → Concavity (scrollytelling)    │     │   │
-│  │  │  Tony.svelte        → Barbell (scrollytelling)      │     │   │
-│  │  │  Turkey.svelte      → Inverse turkey (stepping)     │     │   │
-│  │  └─────────────────────────────────────────────────────┘     │   │
-│  │                                                              │   │
-│  │  ┌─────────────────────────────────────────────────────┐     │   │
-│  │  │           D3.js Visualizations                      │     │   │
-│  │  │                                                     │     │   │
-│  │  │  • Line charts (robust vs antifragile)              │     │   │
-│  │  │  • Payoff curves (convex/concave)                   │     │   │
-│  │  │  • Barbell strategy diagrams                        │     │   │
-│  │  │  • Fat-tailed distributions                         │     │   │
-│  │  └─────────────────────────────────────────────────────┘     │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-│                                                                      │
-│  ┌──────────────────────────────────────────────────────────────┐   │
-│  │              Scroll Interaction (Svelte Runes)               │   │
-│  │                                                              │   │
-│  │  • Track scroll position                                     │   │
-│  │  • Trigger D3 transitions                                    │   │
-│  │  • Update narrative text                                     │   │
-│  └──────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────┘
-
-Build: Vite • Deploy: Cloudflare (adapter-static) • Style: Style Dictionary
-Inspiration: The Pudding's scrollytelling playbook
 ```
+copy.json → Svelte context → 8 components → SVG figures (D3.js)
+```
+
+| Layer | What |
+|---|---|
+| Data | `src/data/copy.json` — all prose |
+| Components | Hero, Wind, Hydra, Stone, Intervention, Tony, Turkey, Credits |
+| Figures | Pure SVG + D3 (line, area, scaleLinear, curveBasis) |
+| Interaction | Scrolly, Slider, ToggleGroup, inView, tweened |
+| Math | `src/utils/gaussian.js` — skewed distributions |
 
 ## Credit
 
 The concepts, parables, and figures are Nassim Nicholas Taleb's, from
-*Antifragile: Things That Gain From Disorder* (Random House, 2012).
+*Antifragile: Things That Gain From Disorder* (Random House, 2012) and
+*Statistical Consequences of Fat Tails* (STEM Academic Press, 2020).
 The starter template is The Pudding's.
