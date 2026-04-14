@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="lindy.design logo" width="200"/>
+</p>
+
 # lindy.design
 
 ![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00)
@@ -44,6 +48,17 @@ Taleb's parables, anchored to figures from his own
 bun install
 bun run dev
 ```
+
+## Tech Stack
+
+| Component       | Tools                                     |
+| --------------- | ----------------------------------------- |
+| Framework       | SvelteKit (Svelte 5)                      |
+| Visualization   | D3.js v7                                  |
+| UI              | bits-ui components                        |
+| Styling         | Style Dictionary (design tokens)          |
+| Build           | Vite                                      |
+| Deploy          | Cloudflare (adapter-cloudflare/static)    |
 
 ## Credit
 
