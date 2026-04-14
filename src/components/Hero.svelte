@@ -29,37 +29,29 @@
 
 	<!-- Three triad icons -->
 	<svg viewBox="0 0 600 200" class="hero-bg" aria-hidden="true">
-		<!-- Impact lines (shared) -->
-		{#each [0, 1, 2] as col}
-			{@const cx = 100 + col * 200}
-			<line x1={cx + 20} y1={92} x2={cx + 40} y2={88} stroke="var(--color-gray-400)" stroke-width="1.5" opacity="0.4" />
-			<line x1={cx + 20} y1={100} x2={cx + 44} y2={100} stroke="var(--color-gray-400)" stroke-width="1.5" opacity="0.4" />
-			<line x1={cx + 20} y1={108} x2={cx + 40} y2={112} stroke="var(--color-gray-400)" stroke-width="1.5" opacity="0.4" />
-			<!-- ball -->
-			<circle cx={cx + 16} cy={100} r="6" fill="var(--color-fragile)" opacity="0.6" />
-		{/each}
+		<!-- All start as straight bars, ball hits, each reacts differently -->
 
-		<!-- Fragile: broken bar, split apart -->
-		<g transform="translate(100, 100)">
-			<line x1="-4" y1="-50" x2="-16" y2="-10" stroke="var(--color-gray-500)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
-			<line x1="-4" y1="50" x2="-16" y2="10" stroke="var(--color-gray-500)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
-		</g>
+		<!-- Ball for each -->
+		<circle cx="116" cy="100" r="6" fill="var(--color-accent)" opacity="0" class="ball ball-1" />
+		<circle cx="316" cy="100" r="6" fill="var(--color-accent)" opacity="0" class="ball ball-2" />
+		<circle cx="516" cy="100" r="6" fill="var(--color-accent)" opacity="0" class="ball ball-3" />
 
-		<!-- Robust: solid bar, unmoved -->
-		<g transform="translate(300, 100)">
-			<line x1="0" y1="-50" x2="0" y2="50" stroke="var(--color-gray-500)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
-		</g>
+		<!-- Fragile: starts straight, then breaks -->
+		<line x1="100" y1="50" x2="100" y2="95" stroke="var(--color-fragile)" stroke-width="10" stroke-linecap="round" opacity="0.5" class="bar bar-fragile-top" />
+		<line x1="100" y1="105" x2="100" y2="150" stroke="var(--color-fragile)" stroke-width="10" stroke-linecap="round" opacity="0.5" class="bar bar-fragile-bottom" />
 
-		<!-- Antifragile: wavy bar, absorbing and growing -->
-		<g transform="translate(500, 100)">
-			<path d="M0 -50 Q15 -30 0 -15 Q-15 0 0 15 Q15 30 0 50"
-				fill="none" stroke="var(--color-antifragile)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
-		</g>
+		<!-- Robust: stays straight -->
+		<line x1="300" y1="50" x2="300" y2="150" stroke="var(--color-robust)" stroke-width="10" stroke-linecap="round" opacity="0.5" class="bar bar-robust" />
+
+		<!-- Antifragile: starts straight, morphs to wavy -->
+		<line x1="500" y1="50" x2="500" y2="150" stroke="var(--color-antifragile)" stroke-width="10" stroke-linecap="round" opacity="0.5" class="bar bar-anti-before" />
+		<path d="M500 50 Q518 70 500 85 Q482 100 500 115 Q518 130 500 150"
+			fill="none" stroke="var(--color-antifragile)" stroke-width="10" stroke-linecap="round" opacity="0" class="bar bar-anti-after" />
 
 		<!-- Labels -->
-		<text x="100" y="170" text-anchor="middle" fill="var(--color-gray-400)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" opacity="0.5">FRAGILE</text>
-		<text x="300" y="170" text-anchor="middle" fill="var(--color-gray-400)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" opacity="0.5">ROBUST</text>
-		<text x="500" y="170" text-anchor="middle" fill="var(--color-antifragile)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" opacity="0.4">ANTIFRAGILE</text>
+		<text x="100" y="175" text-anchor="middle" fill="var(--color-gray-400)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" class="label label-1">FRAGILE</text>
+		<text x="300" y="175" text-anchor="middle" fill="var(--color-gray-400)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" class="label label-2">ROBUST</text>
+		<text x="500" y="175" text-anchor="middle" fill="var(--color-antifragile)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" class="label label-3">ANTIFRAGILE</text>
 	</svg>
 </header>
 
@@ -94,6 +86,69 @@
 		max-width: 540px;
 		height: auto;
 		margin-top: 48px;
+		overflow: visible;
+	}
+
+	/* Balls: fly in, hit, bounce back */
+	.ball { opacity: 0; }
+	.hero.visible .ball-1 { animation: flyHit 0.8s ease-in-out 1.0s forwards; }
+	.hero.visible .ball-2 { animation: flyHit 0.8s ease-in-out 1.8s forwards; }
+	.hero.visible .ball-3 { animation: flyHit 0.8s ease-in-out 2.6s forwards; }
+
+	@keyframes flyHit {
+		0%   { transform: translateX(60px); opacity: 0; }
+		40%  { transform: translateX(0); opacity: 0.8; }
+		55%  { transform: translateX(8px); opacity: 0.6; }
+		70%  { transform: translateX(0); opacity: 0.5; }
+		100% { transform: translateX(0); opacity: 0.4; }
+	}
+
+	/* Fragile: breaks apart — top flies up-left, bottom flies down-left */
+	.bar-fragile-top { transform-origin: 100px 95px; }
+	.bar-fragile-bottom { transform-origin: 100px 105px; }
+	.hero.visible .bar-fragile-top { animation: breakTop 0.5s ease-out 1.4s forwards; }
+	.hero.visible .bar-fragile-bottom { animation: breakBottom 0.5s ease-out 1.4s forwards; }
+
+	@keyframes breakTop {
+		0%   { transform: rotate(0deg) translate(0, 0); }
+		100% { transform: rotate(20deg) translate(-10px, -8px); }
+	}
+	@keyframes breakBottom {
+		0%   { transform: rotate(0deg) translate(0, 0); }
+		100% { transform: rotate(-20deg) translate(-10px, 8px); }
+	}
+
+	/* Robust: shakes then returns to straight */
+	.hero.visible .bar-robust { animation: shake 0.4s ease-out 2.2s; }
+
+	@keyframes shake {
+		0%, 100% { transform: translateX(0); }
+		20% { transform: translateX(-3px); }
+		40% { transform: translateX(3px); }
+		60% { transform: translateX(-2px); }
+		80% { transform: translateX(1px); }
+	}
+
+	/* Antifragile: straight line fades out, wavy fades in */
+	.hero.visible .bar-anti-before { animation: fadeOut 0.4s ease 3.0s forwards; }
+	.hero.visible .bar-anti-after { animation: fadeIn 0.5s ease 3.0s forwards; }
+
+	@keyframes fadeOut {
+		to { opacity: 0; }
+	}
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 0.5; }
+	}
+
+	/* Labels fade in after each impact */
+	.label { opacity: 0; }
+	.hero.visible .label-1 { animation: fadeLabel 0.4s ease 1.8s forwards; }
+	.hero.visible .label-2 { animation: fadeLabel 0.4s ease 2.6s forwards; }
+	.hero.visible .label-3 { animation: fadeLabel 0.4s ease 3.4s forwards; }
+
+	@keyframes fadeLabel {
+		to { opacity: 0.5; }
 	}
 
 	.hero {
