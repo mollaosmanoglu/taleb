@@ -5,9 +5,12 @@
 
 export function skewedGaussian(x, mu, sigma, alpha) {
 	const z = (x - mu) / sigma;
-	const phi = Math.exp(-0.5 * z * z);
-	const erf = Math.tanh(alpha * z * 0.7071); // fast erf approximation
-	return phi * (1 + erf);
+	// Use wider base for the skewed side to create a visible fat tail
+	const skewZ = z - alpha * 0.15;
+	const phi = Math.exp(-0.5 * skewZ * skewZ / (1 + Math.abs(alpha) * 0.08));
+	// Suppress the opposite tail
+	const suppress = 1 / (1 + Math.exp(-alpha * z * 1.5));
+	return phi * suppress;
 }
 
 export function generateCurve(mu, sigma, alpha, n = 100, range = [-4, 4]) {

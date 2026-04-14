@@ -23,19 +23,19 @@
 			label: "Fragile",
 			description: "Fat left tail. Large losses lurk unseen.",
 			color: "var(--color-fragile)",
-			mu: 0.3, sigma: 1, alpha: -3
+			mu: 0.8, sigma: 0.9, alpha: -8
 		},
 		phoenix: {
 			label: "Robust",
 			description: "Symmetric. Small variations, no surprises.",
 			color: "var(--color-robust)",
-			mu: 0, sigma: 0.8, alpha: 0
+			mu: 0, sigma: 0.6, alpha: 0
 		},
 		hydra: {
 			label: "Antifragile",
 			description: "Fat right tail. Large gains possible.",
 			color: "var(--color-antifragile)",
-			mu: -0.3, sigma: 1, alpha: 3
+			mu: -0.8, sigma: 0.9, alpha: 8
 		}
 	};
 
@@ -53,7 +53,7 @@
 	const yScale = scaleLinear().domain([0, 1.1]).range([m.top + plotH, m.top]);
 
 	// Tweened y-values for smooth morphing
-	const initialCurve = generateCurve(0, 0.8, 0, nPoints, [-4, 4]);
+	const initialCurve = generateCurve(0, 0.6, 0, nPoints, [-4, 4]);
 	const tweenedY = tweened(
 		initialCurve.map((p) => p.y),
 		{ duration: 400, easing: cubicOut }
