@@ -26,6 +26,41 @@
 	{#each copy.hero.intro as text}
 		<p class="intro">{text}</p>
 	{/each}
+
+	<!-- Three triad icons -->
+	<svg viewBox="0 0 600 200" class="hero-bg" aria-hidden="true">
+		<!-- Impact lines (shared) -->
+		{#each [0, 1, 2] as col}
+			{@const cx = 100 + col * 200}
+			<line x1={cx + 20} y1={92} x2={cx + 40} y2={88} stroke="var(--color-gray-400)" stroke-width="1.5" opacity="0.4" />
+			<line x1={cx + 20} y1={100} x2={cx + 44} y2={100} stroke="var(--color-gray-400)" stroke-width="1.5" opacity="0.4" />
+			<line x1={cx + 20} y1={108} x2={cx + 40} y2={112} stroke="var(--color-gray-400)" stroke-width="1.5" opacity="0.4" />
+			<!-- ball -->
+			<circle cx={cx + 16} cy={100} r="6" fill="var(--color-fragile)" opacity="0.6" />
+		{/each}
+
+		<!-- Fragile: broken bar, split apart -->
+		<g transform="translate(100, 100)">
+			<line x1="-4" y1="-50" x2="-16" y2="-10" stroke="var(--color-gray-500)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
+			<line x1="-4" y1="50" x2="-16" y2="10" stroke="var(--color-gray-500)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
+		</g>
+
+		<!-- Robust: solid bar, unmoved -->
+		<g transform="translate(300, 100)">
+			<line x1="0" y1="-50" x2="0" y2="50" stroke="var(--color-gray-500)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
+		</g>
+
+		<!-- Antifragile: wavy bar, absorbing and growing -->
+		<g transform="translate(500, 100)">
+			<path d="M0 -50 Q15 -30 0 -15 Q-15 0 0 15 Q15 30 0 50"
+				fill="none" stroke="var(--color-antifragile)" stroke-width="10" stroke-linecap="round" opacity="0.5" />
+		</g>
+
+		<!-- Labels -->
+		<text x="100" y="170" text-anchor="middle" fill="var(--color-gray-400)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" opacity="0.5">FRAGILE</text>
+		<text x="300" y="170" text-anchor="middle" fill="var(--color-gray-400)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" opacity="0.5">ROBUST</text>
+		<text x="500" y="170" text-anchor="middle" fill="var(--color-antifragile)" font-size="11" font-family="var(--font-sans)" letter-spacing="0.1em" opacity="0.4">ANTIFRAGILE</text>
+	</svg>
 </header>
 
 <style>
@@ -52,6 +87,13 @@
 	.github-icon {
 		width: 16px;
 		height: 16px;
+	}
+
+	.hero-bg {
+		width: 100%;
+		max-width: 540px;
+		height: auto;
+		margin-top: 48px;
 	}
 
 	.hero {
