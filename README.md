@@ -1,7 +1,14 @@
-# taleb
+# lindy.design
 
-A visual essay on Nassim Taleb's *Antifragile*. Built on
-[The Pudding's Svelte starter](https://github.com/the-pudding/svelte-starter).
+![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![D3](https://img.shields.io/badge/D3-v7-F9A03C)
+
+Interactive visual essay on Nassim Taleb's *Antifragile*. Convexity, barbell payoffs, and fat-tailed distributions rendered as scrollytelling figures. Inspired by [The Pudding](https://pudding.cool).
+
+<p align="center">
+  <img src="docs/screenshot.png" alt="Visual essay preview" width="800"/>
+</p>
 
 ## The question
 
