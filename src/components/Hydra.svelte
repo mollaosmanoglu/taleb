@@ -45,6 +45,12 @@
 
 	let current = $derived(stateConfig[active]);
 
+	const iconMap = {
+		damocles: "/img/damocles.png",
+		phoenix: "/img/phoenix.png",
+		hydra: "/img/hydra.png"
+	};
+
 	// SVG dimensions
 	const w = 420;
 	const h = 200;
@@ -104,7 +110,7 @@
 			<span></span>
 			{#each section.triad as col}
 				<div class="matrix-head-col">
-					<span class="matrix-icon">{col.icon}</span>
+					<img src={col.img} alt={col.name} class="matrix-img" />
 					<span class="matrix-name" style:color="var(--color-{col.color})">{col.name}</span>
 					<span class="matrix-desc">{col.description}</span>
 				</div>
@@ -151,6 +157,10 @@
 				fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
 				gains
 			</text>
+
+			<!-- icon centered in distribution (behind shade) -->
+			<image href={iconMap[active]} x={xScale(0) - 32} y={m.top + plotH - 74}
+				width="64" height="64" opacity="0.35" />
 
 			<!-- filled area -->
 			<path d={curveArea} fill={current.color} opacity="0.15" />
@@ -265,8 +275,10 @@
 		gap: 4px;
 	}
 
-	.matrix-icon {
-		font-size: 20px;
+	.matrix-img {
+		width: 48px;
+		height: 48px;
+		object-fit: contain;
 	}
 
 	.matrix-name {

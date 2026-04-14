@@ -32,9 +32,9 @@
 				"The Phoenix burns to ash and is reborn, unchanged. The Hydra, when you cut off one head, grows back two. Three mythological characters, three responses to the same force. Taleb uses them to name the spectrum."
 			],
 			"triad": [
-				{ "icon": "🥂", "name": "Fragile", "color": "fragile", "description": "Hates volatility. Harmed by shocks. Needs calm." },
-				{ "icon": "🔥", "name": "Robust", "color": "robust", "description": "Indifferent to volatility. Neither helped nor harmed." },
-				{ "icon": "🐉", "name": "Antifragile", "color": "antifragile", "description": "Loves volatility. Gains from disorder. Grows stronger." }
+				{ "icon": "🥂", "img": "/img/damocles.png", "name": "Fragile", "color": "fragile", "description": "Hates volatility. Harmed by shocks. Needs calm." },
+				{ "icon": "🔥", "img": "/img/phoenix.png", "name": "Robust", "color": "robust", "description": "Indifferent to volatility. Neither helped nor harmed." },
+				{ "icon": "🐉", "img": "/img/hydra.png", "name": "Antifragile", "color": "antifragile", "description": "Loves volatility. Gains from disorder. Grows stronger." }
 			],
 			"extended": [
 				{ "domain": "Errors", "fragile": "Irreversible, large", "robust": "Mistakes are information", "antifragile": "Loves mistakes (small)" },
