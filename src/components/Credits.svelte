@@ -16,8 +16,11 @@
 		margin: 0 auto;
 		padding: 96px 24px 64px;
 		border-top: 1px solid var(--color-gray-200);
-		font-size: var(--14px);
-		color: var(--color-gray-600);
+		color: var(--color-gray-500);
 		line-height: 1.6;
+	}
+
+	footer p {
+		font-size: 12px;
 	}
 </style>

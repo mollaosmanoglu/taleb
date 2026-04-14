@@ -97,13 +97,26 @@
 		<p class="body">{text}</p>
 	{/each}
 
-	<!-- Figure 1: The Triad (Taleb's Table 1) -->
-	<div class="triad">
-		{#each section.triad as col}
-			<div class="triad-col" style:border-color="var(--color-{col.color})">
-				<p class="triad-icon">{col.icon}</p>
-				<p class="triad-name" style:color="var(--color-{col.color})">{col.name}</p>
-				<p class="triad-desc">{col.description}</p>
+	<!-- The Triad Matrix -->
+	<div class="matrix">
+		<!-- Header: icons + names + descriptions -->
+		<div class="matrix-header">
+			<span></span>
+			{#each section.triad as col}
+				<div class="matrix-head-col">
+					<span class="matrix-icon">{col.icon}</span>
+					<span class="matrix-name" style:color="var(--color-{col.color})">{col.name}</span>
+					<span class="matrix-desc">{col.description}</span>
+				</div>
+			{/each}
+		</div>
+		<!-- Domain rows -->
+		{#each section.extended as row}
+			<div class="matrix-row">
+				<span class="matrix-domain">{row.domain}</span>
+				<span>{row.fragile}</span>
+				<span>{row.robust}</span>
+				<span>{row.antifragile}</span>
 			</div>
 		{/each}
 	</div>
@@ -230,42 +243,69 @@
 		max-width: 540px;
 	}
 
-	.triad {
-		display: flex;
-		gap: 16px;
-		margin-bottom: 32px;
-		width: 100%;
+	.matrix {
 		max-width: 540px;
+		margin-bottom: 32px;
 	}
 
-	.triad-col {
-		flex: 1;
-		border-top: 3px solid;
-		padding: 16px 12px;
-		text-align: center;
-	}
-
-	.triad-icon {
-		font-size: var(--24px, 1.5rem);
+	.matrix-header {
+		display: grid;
+		grid-template-columns: 70px 1fr 1fr 1fr;
+		gap: 8px;
+		padding-bottom: 12px;
 		margin-bottom: 8px;
+		border-bottom: 1px solid var(--color-gray-200);
 	}
 
-	.triad-name {
+	.matrix-head-col {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 4px;
+	}
+
+	.matrix-icon {
+		font-size: 20px;
+	}
+
+	.matrix-name {
 		font-family: var(--font-sans);
-		font-size: var(--14px);
+		font-size: 12px;
 		font-weight: 700;
-		margin-bottom: 4px;
 	}
 
-	.triad-desc {
-		font-size: var(--12px, 0.75rem);
+	.matrix-desc {
+		font-size: 10px;
+		color: var(--color-gray-500);
+		line-height: 1.4;
+	}
+
+	.matrix-row {
+		display: grid;
+		grid-template-columns: 70px 1fr 1fr 1fr;
+		gap: 8px;
+		padding: 6px 0;
+	}
+
+	.matrix-row span {
+		font-size: 13px;
 		color: var(--color-gray-600);
-		line-height: 1.5;
+	}
+
+	.matrix-domain {
+		font-family: var(--font-sans);
+		font-weight: 600;
+		color: var(--color-gray-500) !important;
+		font-size: 11px !important;
 	}
 
 	@media (max-width: 500px) {
-		.triad {
-			flex-direction: column;
+		.matrix-header, .matrix-row {
+			grid-template-columns: 60px 1fr 1fr 1fr;
+		}
+		.matrix-desc {
+			display: none;
 		}
 	}
 
@@ -305,7 +345,7 @@
 		color: var(--color-gray-600);
 	}
 
-	.message {
+.message {
 		font-size: var(--20px);
 		line-height: 1.6;
 		color: var(--color-gray-800);

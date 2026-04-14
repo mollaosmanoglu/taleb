@@ -6,7 +6,7 @@
 	"hero": {
 		"kicker": "A visual essay on Nassim Taleb's <em>Antifragile</em>",
 		"title": "What is the opposite of fragile?",
-		"dek": "Most people answer \"robust.\" It isn't.",
+		"dek": "Most people answer robust. It isn't.",
 		"intro": [
 			"If you ship a box of wine glasses, you write FRAGILE — HANDLE WITH CARE on it. What would you write on a box that actually benefits from being shaken?",
 			"English doesn't have the word. Taleb had to coin one. The thing he named is behind everything that has changed with time: evolution, culture, ideas, revolutions, your own career. Let's find it."
@@ -36,6 +36,13 @@
 				{ "icon": "🥂", "name": "Fragile", "color": "fragile", "description": "Hates volatility. Harmed by shocks. Needs calm." },
 				{ "icon": "🔥", "name": "Robust", "color": "robust", "description": "Indifferent to volatility. Neither helped nor harmed." },
 				{ "icon": "🐉", "name": "Antifragile", "color": "antifragile", "description": "Loves volatility. Gains from disorder. Grows stronger." }
+			],
+			"extended": [
+				{ "domain": "Errors", "fragile": "Irreversible, large", "robust": "Mistakes are information", "antifragile": "Loves mistakes (small)" },
+				{ "domain": "Systems", "fragile": "Banking system", "robust": "Civil service", "antifragile": "Silicon Valley: fail fast" },
+				{ "domain": "Finance", "fragile": "Debt", "robust": "Equity", "antifragile": "Venture capital" },
+				{ "domain": "Science", "fragile": "Directed research", "robust": "Observation", "antifragile": "Tinkering, trial and error" },
+				{ "domain": "Politics", "fragile": "Nation-state", "robust": "City-state", "antifragile": "Bottom-up communes" }
 			],
 			"bodyAfter": [
 				"English has words for the first two — but not the third. Gaining from disorder needed a new word. So what does the difference actually look like?",
@@ -94,6 +101,7 @@
 			"figureLabel": "The barbell: floor your losses, keep the upside open",
 			"bodyAfter": [
 				"$300,000 became $18 million. Not because he predicted the war. Because he didn't need to. The key was asymmetry: limited downside, unlimited upside.",
+				"Taleb calls this optionality — the right but not the obligation. An option is an agent of antifragility. You pay a small price for the privilege of asymmetry: you lose small when wrong, you earn big when right. If you make more when you are right than you are hurt when you are wrong, you will benefit from volatility. You want volatility.",
 				"Drag the slider. Watch what happens to a convex and concave position as shocks grow."
 			],
 			"insights": {
@@ -101,7 +109,7 @@
 				"moderate": "The curves diverge. The convex position gains more than it loses. The concave one loses more than it gains.",
 				"large": "Large shock — the convex payoff explodes upward while the concave one collapses. This is why Fat Tony bets on volatility."
 			},
-			"message": "Don't predict. Position. Cap the downside, leave the upside open."
+			"message": "Don't predict. Position. Distribute your risk, cap the downside, leave the upside open. This is optionality."
 		},
 		{
 			"id": "turkey",
