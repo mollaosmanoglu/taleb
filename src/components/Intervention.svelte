@@ -206,6 +206,7 @@
 	.figure {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 24px;
 		margin-bottom: 48px;
 		max-width: 540px;
@@ -227,8 +228,9 @@
 	.negativa {
 		display: flex;
 		gap: 24px;
-		margin-bottom: 48px;
+		margin: 0 auto 48px;
 		max-width: 540px;
+		width: 100%;
 	}
 
 	.negativa-col {
