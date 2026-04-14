@@ -9,16 +9,16 @@
 	<p class="kicker">A visual essay on Nassim Taleb's <em>Antifragile</em></p>
 	<h1>What is the opposite of fragile?</h1>
 	<p class="dek">
-		Most people answer "robust." It isn't. English is missing the
-		word — Taleb had to coin it. Five parables, five figures.
+		Most people answer "robust." It isn't.
 	</p>
 	<p class="intro">
-		Some things benefit from shocks. They thrive when exposed to
-		volatility, randomness, and disorder. The resilient resists shocks
-		and stays the same; the antifragile gets better. This property is
-		behind everything that has changed with time: evolution, culture,
-		ideas, political systems, technological innovation — even our own
-		existence as a species.
+		English doesn't have the word. Taleb had to coin it. The thing
+		he named is behind everything that has changed with time:
+		evolution, culture, ideas, political systems, your own career.
+	</p>
+	<p class="intro">
+		Some things benefit from shocks. Not just resist them — actually
+		get better. Six parables, nine figures. Scroll.
 	</p>
 </header>
 

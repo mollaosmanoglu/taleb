@@ -109,6 +109,16 @@ h6 {
 	font-size: var(--20px, 20px);
 }
 
+p, aside, blockquote {
+	font-size: var(--18px, 18px);
+}
+
+@media (min-width: 600px) {
+	p, aside, blockquote {
+		font-size: var(--20px, 20px);
+	}
+}
+
 svg {
 	display: block;
 	width: 100%;

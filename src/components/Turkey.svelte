@@ -67,18 +67,18 @@
 	<p class="number">VI</p>
 	<h2>The Turkey</h2>
 	<p class="parable">
-		A turkey is fed for a thousand days by a butcher. Every day
-		confirms to its staff of analysts that butchers love turkeys —
-		with increased statistical confidence. The butcher will keep
-		feeding the turkey until a few days before Thanksgiving.
+		A turkey is fed every day for a thousand days. Every feeding
+		confirms — with increasing statistical confidence — that
+		butchers love turkeys.
 	</p>
 	<p class="body">
-		Then comes that day when it is really not a very good idea to be
-		a turkey. Its confidence was maximal at the precise moment its
-		risk was highest. The turkey mistook absence of evidence of harm
-		for evidence of absence of harm — the mother of all mistakes.
-		Stable history was not evidence of safety. It was the opposite:
-		evidence of a trap building in silence.
+		Day 1,001 is Thanksgiving.
+	</p>
+	<p class="body">
+		Confidence was maximal at the precise moment risk was highest.
+		The turkey confused absence of evidence of harm with evidence of
+		absence of harm. Stable history was not safety. It was a trap
+		building in silence.
 	</p>
 
 	<div

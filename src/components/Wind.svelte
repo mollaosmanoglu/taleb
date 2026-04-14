@@ -80,15 +80,14 @@
 	<p class="number">I</p>
 	<h2>How to Love the Wind</h2>
 	<p class="parable">
-		Wind extinguishes a candle and energizes fire. Likewise with
-		randomness, uncertainty, chaos: you want to use them, not hide
-		from them. You want to be the fire and wish for the wind.
+		Wind extinguishes a candle and energizes fire.
 	</p>
 	<p class="body">
-		Same shock, opposite responses. The candle is fragile — it needs
-		calm and predictability. The fire is antifragile — it feeds on the
-		very thing that kills the candle. The two lines below show the same
-		random walk hit by the same shock. One collapses. The other
+		Same force. Opposite outcome. The candle needs calm — it's
+		fragile. The fire feeds on the very thing that kills the candle.
+	</p>
+	<p class="body">
+		Watch two systems hit by the same shock. One collapses. The other
 		thrives.
 	</p>
 

@@ -60,18 +60,14 @@
 	<p class="number">IV</p>
 	<h2>Naive Intervention</h2>
 	<p class="parable">
-		A doctor treats a patient with a mild headache. The treatment works
-		— the headache goes away. But the side effects accumulate, unseen,
-		in the liver. The patient returns a year later with something far
-		worse than a headache.
+		A doctor treats a mild headache. The headache goes away. A year
+		later the patient returns with liver failure.
 	</p>
-
 	<p class="body">
-		Iatrogenics — harm caused by the healer. The word exists in
-		medicine but applies everywhere. Governments intervene in economies,
-		creating fragility. Managers intervene in teams, killing
-		optionality. The urge to "do something" is often the most dangerous
-		thing of all.
+		The Greeks had a word for this: iatrogenics — harm caused by the
+		healer. The concept applies everywhere. Governments intervene in
+		economies. Managers intervene in teams. The urge to "do something"
+		is often the most dangerous thing of all.
 	</p>
 
 	<!-- Figure 1: Iatrogenics (Fig 31) — two overlapping distributions -->
@@ -123,10 +119,8 @@
 	</div>
 
 	<p class="body">
-		The cure is via negativa — by subtraction. Don't ask what to add.
-		Ask what to remove. Subtraction is more robust than addition
-		because it has fewer side effects, fewer unintended consequences,
-		fewer things that can go wrong.
+		The cure has a name: via negativa. Don't ask what to add. Ask
+		what to remove.
 	</p>
 
 	<!-- Figure 2: Via Negativa — subtraction table -->

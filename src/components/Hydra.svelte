@@ -89,15 +89,13 @@
 	<p class="number">II</p>
 	<h2>Between Damocles and Hydra</h2>
 	<p class="parable">
-		Damocles dines under a sword suspended by a single horsehair —
-		one gust and it drops. The Phoenix burns to ash and is reborn,
-		unchanged. The Hydra, when you cut off one head, grows back two.
+		Damocles dines under a sword suspended by a single horsehair.
+		One gust and it drops.
 	</p>
-
 	<p class="body">
-		Three mythological characters, three responses to the same force.
-		They map to everything: political systems, organisms, financial
-		contracts, your career.
+		The Phoenix burns to ash and is reborn, unchanged. The Hydra,
+		when you cut off one head, grows back two. Three characters,
+		three responses to the same force.
 	</p>
 
 	<!-- Figure 1: The Triad (Taleb's Table 1) -->
@@ -120,10 +118,12 @@
 	</div>
 
 	<p class="body">
-		English has words for the first two — but not the third. The
-		Hydra's property, gaining from disorder, needed a new word.
-		Toggle between the three to see how their probability
-		distributions differ.
+		English has words for the first two — but not the third. Gaining
+		from disorder needed a new word.
+	</p>
+	<p class="body">
+		Toggle between the three. Watch how the shape of possible
+		outcomes changes.
 	</p>
 
 	<!-- Figure 2: Morphing distribution curve -->

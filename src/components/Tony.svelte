@@ -119,17 +119,14 @@
 	<p class="number">V</p>
 	<h2>Fat Tony</h2>
 	<p class="parable">
-		Fat Tony is Taleb's recurring character — a trader from Brooklyn
-		who makes his living from other people's blindness. He doesn't
-		predict the future. He positions himself so that prediction becomes
-		unnecessary.
+		Fat Tony is a trader from Brooklyn who makes his living from
+		other people's blindness.
 	</p>
-
 	<p class="body">
-		During the run-up to the Iraq war, Tony noticed that the market
-		priced oil as if nothing would happen. He bought options —
-		contracts that would pay off enormously if prices spiked, and cost
-		very little if they didn't.
+		He doesn't predict. He positions. During the run-up to the Iraq
+		war, he noticed the market priced oil as if nothing would happen.
+		So he bought options — contracts that cost almost nothing if he
+		was wrong, and paid enormously if he was right.
 	</p>
 
 	<!-- Figure 1: The Barbell (Fig 24) -->
@@ -163,14 +160,12 @@
 	</div>
 
 	<p class="body">
-		Three hundred thousand dollars became eighteen million. The key
-		was not foresight. It was asymmetry: limited downside, unlimited
-		upside. A convex payoff.
+		$300,000 became $18 million. Not because he predicted the war.
+		Because he didn't need to.
 	</p>
-
 	<p class="body">
-		Drag the slider to see how convex and concave positions diverge
-		as shocks grow.
+		Drag the slider. Watch what happens to the two positions as
+		shocks grow.
 	</p>
 
 	<!-- Figure 2: Convexity payoff (Fig 26-27) -->

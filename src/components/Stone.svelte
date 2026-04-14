@@ -65,20 +65,19 @@
 	<p class="number">III</p>
 	<h2>Stone and Pebbles</h2>
 	<p class="parable">
-		A king, angry at his son, swore he would crush him with a large
-		stone. After he calmed down, he realized he was in trouble — a
-		king who breaks his oath is unfit to rule. His advisor found a
-		solution: cut the stone into pebbles and pelt the prince with
-		them.
+		A king swore he would crush his son with a stone. After he calmed
+		down, he was in trouble — a king who breaks an oath is unfit to
+		rule.
 	</p>
 	<p class="body">
-		The difference between a thousand pebbles and one large stone of
-		equivalent weight is a potent illustration of nonlinearity. Throw
-		a ten-pound stone at someone — it causes more than twice the harm
-		of a five-pound stone, more than five times the harm of a
-		two-pound stone. Harm curves inward. Each additional unit hurts
-		more than the last. This is concavity: the hidden signature of
-		fragility. Scroll through to see it.
+		His advisor found a solution: cut the stone into a thousand
+		pebbles.
+	</p>
+	<p class="body">
+		Same total weight. Completely different harm. A ten-pound stone
+		hurts more than twice as much as a five-pound stone, more than
+		five times a two-pound stone. Harm isn't proportional — it
+		accelerates. Scroll through to see it.
 	</p>
 
 	<div class="scrolly-container">
