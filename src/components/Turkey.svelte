@@ -41,6 +41,10 @@
 	let areaPath = $derived(areaFn(visiblePoints));
 	let isCliff = $derived(day > totalDays);
 
+	// Turkey icon position — follows the line, then falls off cliff
+	let turkeyX = $derived(isCliff ? points[totalDays].x : (visiblePoints.length > 0 ? visiblePoints[visiblePoints.length - 1].x : points[0].x));
+	let turkeyY = $derived(isCliff ? m.top + plotH - 4 : (visiblePoints.length > 0 ? visiblePoints[visiblePoints.length - 1].y - 12 : points[0].y - 12));
+
 	// Cliff line (drops from last point to baseline)
 	let cliffPath = $derived(() => {
 		if (!isCliff || visiblePoints.length === 0) return "";
@@ -132,6 +136,14 @@
 					stroke-width="2.5"
 					stroke-linejoin="round"
 				/>
+			{/if}
+
+			<!-- turkey icon following the line -->
+			{#if day > 0}
+				<text x={turkeyX} y={turkeyY} text-anchor="middle"
+					font-size="14" class="turkey-icon" class:fallen={isCliff}>
+					🦃
+				</text>
 			{/if}
 
 			<!-- the cliff drop -->
@@ -239,6 +251,19 @@
 
 	.area {
 		transition: opacity 0.5s ease;
+	}
+
+	.turkey-icon {
+		transition: transform 0.06s linear;
+	}
+
+	.turkey-icon.fallen {
+		animation: fall 0.4s ease-in forwards;
+	}
+
+	@keyframes fall {
+		0% { opacity: 1; }
+		100% { opacity: 0.3; }
 	}
 
 	.replay {

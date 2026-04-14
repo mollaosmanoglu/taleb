@@ -110,6 +110,28 @@
 				font-family="var(--font-sans)">
 				Benefits
 			</text>
+
+			<!-- arrow: "you see this" pointing to benefit peak -->
+			<g class="annotation">
+				<text x={xScale(2.8)} y={m.top + 14} text-anchor="start"
+					fill="var(--color-gray-500)" font-size="7" font-style="italic"
+					font-family="var(--font-sans)">
+					you see this
+				</text>
+				<line x1={xScale(2.7)} y1={m.top + 16} x2={xScale(1.8)} y2={yScale(0.9)}
+					stroke="var(--color-gray-400)" stroke-width="0.8" />
+			</g>
+
+			<!-- arrow: "you don't see this" pointing to left tail -->
+			<g class="annotation">
+				<text x={xScale(-3.8)} y={m.top + 14} text-anchor="start"
+					fill="var(--color-gray-500)" font-size="7" font-style="italic"
+					font-family="var(--font-sans)">
+					you don't see this
+				</text>
+				<line x1={xScale(-3.2)} y1={m.top + 16} x2={xScale(-2.5)} y2={m.top + plotH * 0.55}
+					stroke="var(--color-gray-400)" stroke-width="0.8" />
+			</g>
 		</svg>
 
 		<p class="figure-caption">

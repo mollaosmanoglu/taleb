@@ -100,7 +100,7 @@
 		<div class="charts">
 			<!-- Fragile time series -->
 			<div class="chart-wrapper">
-				<p class="chart-label" style:color="var(--color-fragile)">Fragile</p>
+				<p class="chart-label" style:color="var(--color-fragile)">🕯️ Fragile</p>
 				<svg viewBox="0 0 {w} {h}">
 					<!-- axes -->
 					<line x1={m.left} y1={m.top + plotH} x2={m.left + plotW} y2={m.top + plotH}
@@ -132,7 +132,7 @@
 
 			<!-- Antifragile time series -->
 			<div class="chart-wrapper">
-				<p class="chart-label" style:color="var(--color-antifragile)">Antifragile</p>
+				<p class="chart-label" style:color="var(--color-antifragile)">🔥 Antifragile</p>
 				<svg viewBox="0 0 {w} {h}">
 					<!-- axes -->
 					<line x1={m.left} y1={m.top + plotH} x2={m.left + plotW} y2={m.top + plotH}
