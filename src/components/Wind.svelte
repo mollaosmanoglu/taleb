@@ -80,7 +80,16 @@
 	<p class="number">I</p>
 	<h2>How to Love the Wind</h2>
 	<p class="parable">
-		Wind extinguishes a candle and energizes fire.
+		Wind extinguishes a candle and energizes fire. Likewise with
+		randomness, uncertainty, chaos: you want to use them, not hide
+		from them. You want to be the fire and wish for the wind.
+	</p>
+	<p class="body">
+		Same shock, opposite responses. The candle is fragile — it needs
+		calm and predictability. The fire is antifragile — it feeds on the
+		very thing that kills the candle. The two lines below show the same
+		random walk hit by the same shock. One collapses. The other
+		thrives.
 	</p>
 
 	<div
@@ -207,6 +216,14 @@
 		font-style: italic;
 		line-height: 1.6;
 		color: var(--color-gray-700);
+		margin-bottom: 16px;
+		max-width: 540px;
+	}
+
+	.body {
+		font-size: var(--16px, 1rem);
+		line-height: 1.7;
+		color: var(--color-gray-600);
 		margin-bottom: 48px;
 		max-width: 540px;
 	}

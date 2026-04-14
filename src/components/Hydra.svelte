@@ -89,11 +89,44 @@
 	<p class="number">II</p>
 	<h2>Between Damocles and Hydra</h2>
 	<p class="parable">
-		Damocles dines with a sword dangling over his head. The Phoenix
-		burns and returns unchanged. The Hydra grows two heads where one
-		is cut.
+		Damocles dines under a sword suspended by a single horsehair —
+		one gust and it drops. The Phoenix burns to ash and is reborn,
+		unchanged. The Hydra, when you cut off one head, grows back two.
 	</p>
 
+	<p class="body">
+		Three mythological characters, three responses to the same force.
+		They map to everything: political systems, organisms, financial
+		contracts, your career.
+	</p>
+
+	<!-- Figure 1: The Triad (Taleb's Table 1) -->
+	<div class="triad">
+		<div class="triad-col" style:border-color="var(--color-fragile)">
+			<p class="triad-icon">🥂</p>
+			<p class="triad-name" style:color="var(--color-fragile)">Fragile</p>
+			<p class="triad-desc">Hates volatility. Harmed by shocks. Needs calm.</p>
+		</div>
+		<div class="triad-col" style:border-color="var(--color-robust)">
+			<p class="triad-icon">🔥</p>
+			<p class="triad-name" style:color="var(--color-robust)">Robust</p>
+			<p class="triad-desc">Indifferent to volatility. Neither helped nor harmed.</p>
+		</div>
+		<div class="triad-col" style:border-color="var(--color-antifragile)">
+			<p class="triad-icon">🐉</p>
+			<p class="triad-name" style:color="var(--color-antifragile)">Antifragile</p>
+			<p class="triad-desc">Loves volatility. Gains from disorder. Grows stronger.</p>
+		</div>
+	</div>
+
+	<p class="body">
+		English has words for the first two — but not the third. The
+		Hydra's property, gaining from disorder, needed a new word.
+		Toggle between the three to see how their probability
+		distributions differ.
+	</p>
+
+	<!-- Figure 2: Morphing distribution curve -->
 	<div class="figure">
 		<div class="toggle-row">
 			<ToggleGroup {items} bind:value={active} required={true} />
@@ -178,8 +211,55 @@
 		font-style: italic;
 		line-height: 1.6;
 		color: var(--color-gray-700);
-		margin-bottom: 48px;
+		margin-bottom: 16px;
 		max-width: 540px;
+	}
+
+	.body {
+		font-size: var(--16px, 1rem);
+		line-height: 1.7;
+		color: var(--color-gray-600);
+		margin-bottom: 32px;
+		max-width: 540px;
+	}
+
+	.triad {
+		display: flex;
+		gap: 16px;
+		margin-bottom: 32px;
+		width: 100%;
+		max-width: 540px;
+	}
+
+	.triad-col {
+		flex: 1;
+		border-top: 3px solid;
+		padding: 16px 12px;
+		text-align: center;
+	}
+
+	.triad-icon {
+		font-size: var(--24px, 1.5rem);
+		margin-bottom: 8px;
+	}
+
+	.triad-name {
+		font-family: var(--font-sans);
+		font-size: var(--14px);
+		font-weight: 700;
+		margin-bottom: 4px;
+	}
+
+	.triad-desc {
+		font-size: var(--12px, 0.75rem);
+		color: var(--color-gray-600);
+		line-height: 1.5;
+	}
+
+	@media (max-width: 500px) {
+		.triad {
+			flex-direction: column;
+		}
 	}
 
 	.figure {

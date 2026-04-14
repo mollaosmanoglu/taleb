@@ -67,9 +67,18 @@
 	<p class="number">V</p>
 	<h2>The Turkey</h2>
 	<p class="parable">
-		A turkey is fed every day for a thousand days. Every day confirms
-		its belief that the farmer loves it. Day one thousand and one is
-		Thanksgiving.
+		A turkey is fed for a thousand days by a butcher. Every day
+		confirms to its staff of analysts that butchers love turkeys —
+		with increased statistical confidence. The butcher will keep
+		feeding the turkey until a few days before Thanksgiving.
+	</p>
+	<p class="body">
+		Then comes that day when it is really not a very good idea to be
+		a turkey. Its confidence was maximal at the precise moment its
+		risk was highest. The turkey mistook absence of evidence of harm
+		for evidence of absence of harm — the mother of all mistakes.
+		Stable history was not evidence of safety. It was the opposite:
+		evidence of a trap building in silence.
 	</p>
 
 	<div
@@ -202,6 +211,14 @@
 		font-style: italic;
 		line-height: 1.6;
 		color: var(--color-gray-700);
+		margin-bottom: 16px;
+		max-width: 540px;
+	}
+
+	.body {
+		font-size: var(--16px, 1rem);
+		line-height: 1.7;
+		color: var(--color-gray-600);
 		margin-bottom: 48px;
 		max-width: 540px;
 	}

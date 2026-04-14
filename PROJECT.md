@@ -87,6 +87,73 @@ Use only what the starter already ships (see [README.md](README.md)):
 No new dependencies until a section proves it needs one. No chart framework
 installed speculatively. No UI component library.
 
+## Guidelines — Pudding essay benchmarks (n = 10)
+
+Sampled 10 published Pudding essays to set targets:
+
+| Essay | Words | Figures |
+|-------|------:|--------:|
+| Women in Headlines | 2,850 | 6 |
+| Song Repetition | 2,100 | 6 |
+| Pockets | 2,400 | 10 |
+| Film Dialogue | 1,100 | 7 |
+| Genre (Spotify) | 1,850 | 1 |
+| Foundation Names | 2,850 | 14 |
+| How the Internet Laughs | 675 | 8 |
+| Big Hair | 1,900 | 36 |
+| EU Regions | 2,100 | 12 |
+| Women in Congress | 2,100 | 13 |
+
+**Words:** median ~2,100 · range 675–2,850
+**Figures:** median ~9 · range 1–36
+
+Aim for **~1,500–2,500 words** and **5–10 figures**. We have 5 interactive
+figures (one per parable). Word count is currently low — add more prose to
+each parable section to reach ~300–500 words per section.
+
+## Figure catalogue — Taleb's graphical tour (Fig 19–36)
+
+Every distinct concept from the appendix, with what we currently cover:
+
+| # | Figure | Concept | What it shows | Status |
+|---|--------|---------|---------------|--------|
+| 1 | Fig 19 | Dose-response / Less is More | Inverted U — benefits reverse beyond a point | — |
+| 2 | Fig 20–21 | Fragile blowup vs antifragile spike | Time series, same shock opposite outcomes | **Wind** ✓ |
+| 3 | Fig 22 | Four probability shapes | Tail asymmetry (fragile/robust/antifragile) | **Hydra** ✓ |
+| 4 | Fig 23 | Definition of fragility | Left tail mass grows under stress | — (technical) |
+| 5 | Fig 24 | Barbell strategy | Floor the downside, keep unlimited upside | — |
+| 6 | Fig 25–26 | Uncertainty injection | Fragile loses, antifragile gains under volatility | — |
+| 7 | Fig 27 | Convex transformation | Event ≠ exposure. f(x) vs x. Eliminate downside | — |
+| 8 | Fig 28 | Nonlinear harm (concavity) | Size matters more than frequency | **Stone** ✓ |
+| 9 | Fig 29 | Weak antifragility | Bounded benefit, typical in nature | — (similar to 1) |
+| 10 | Fig 31 | Iatrogenics | Small visible gains, hidden catastrophic losses | — |
+| 11 | Fig 32 | Biology S-curve | Convex at low dose, concave at high dose | — (similar to 1) |
+| 12 | Fig 34 | Hormesis | What doesn't kill you makes you stronger | — |
+| 13 | Fig 35 | Inverse Turkey | Confidence maximal right before collapse | **Turkey** ✓ |
+| 14 | Fig 36 | Planners' mistake | Predicted costs vs actual (left tail surprise) | — |
+
+Tony currently shows convex vs concave payoff (Fig 26–27 territory).
+
+## Pudding animation patterns (from 10+ repos)
+
+| Pattern | How it works | Pudding examples | Our use |
+|---------|-------------|-----------------|---------|
+| Scrolly + sticky figure | `Scrolly bind:value` + `position: sticky` | censorship, yard-sale, pop-love-songs | Stone ✓ |
+| Progressive draw | `setInterval` draws SVG path frame-by-frame on `inView` | (our own) | Wind ✓, Turkey ✓ |
+| Toggle/ButtonSet | Tap buttons to swap states, figure morphs | censorship, emotion-wheel | Hydra ✓ |
+| Slider/Range | Drag to change parameter, figure reacts live | yard-sale, nba-uniforms | Tony ✓ |
+| Simulation | `setInterval` runs model, bars update live + play/reset | yard-sale (YSM) | — |
+| Side-by-side compare | Two charts/images flex side-by-side | censorship (Graphic.Compare) | Wind ✓ |
+| Image keyframe scrolly | Scroll swaps positioned images with opacity/position transitions | yard-sale (scrolly) | — |
+| Stacked bar | `ColumnStacked` via LayerCake | censorship | — |
+| Line/Area chart | `Line.svelte` + axes via LayerCake context | yard-sale, nba-uniforms | manual d3 (LayerCake incompatible with runes) |
+| Beeswarm/Force | `d3-force` simulation for dot plots | kids-book-animals, nba-uniforms | — |
+| CSS keyframes | `@keyframes` for shake, bounce, spin | emotion-wheel, yard-sale | — |
+| svelte/transition | `fade`, `fly` on mount/unmount | yard-sale, emotion-wheel | — |
+
+Key Pudding structural rule: **short paragraphs (1–3 sentences) interleaved
+with figures**. Prose → figure → prose → figure. Questions drive the reader.
+
 ## Non-goals
 
 - Not a book summary. Skip anything that doesn't have a visual hook.

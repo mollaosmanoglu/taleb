@@ -27,33 +27,46 @@
 	--radius-md: 0.5rem;
 	--radius-lg: 1rem;
 	
-	--color-bg: var(--color-bg-warm, var(--color-white));
-	--color-fg: var(--color-black);
-	--color-fg-light: var(--color-gray-500);
-	--color-primary: var(--color-black);
-	--color-link: var(--color-black);
-	--color-link-hover: var(--color-black);
-	--color-focus: var(--color-gray-500);
+	/* dark charcoal theme — Notion-adjacent (#191919 ≈ oklch 0.17) */
+	--color-bg: oklch(0.19 0.005 260);             /* charcoal, slightly lighter than Notion */
+	--color-fg: oklch(0.9 0.005 80);               /* warm off-white */
+	--color-fg-light: oklch(0.6 0 0);
+	--color-primary: oklch(0.9 0.005 80);
+	--color-link: oklch(0.75 0.08 80);
+	--color-link-hover: oklch(0.85 0.1 80);
+	--color-focus: oklch(0.5 0 0);
 	--color-mark: var(--color-yellow);
-	--color-selection: var(--color-gray-300);
-	--color-border: var(--color-gray-300);
-	--color-button-fg-primary: var(--color-white);
-	--color-button-bg-primary: var(--color-gray-900);
-	--color-button-fg-secondary: var(--color-white);
-	--color-button-bg-secondary: var(--color-gray-500);
-	--color-input-bg: var(--color-gray-50);
-	--color-input-fg: var(--color-gray-900);
-	--color-placeholder: var(--color-gray-500);
+	--color-selection: oklch(0.3 0.02 260);
+	--color-border: oklch(0.28 0.005 260);
+	--color-button-fg-primary: oklch(0.16 0.005 260);
+	--color-button-bg-primary: oklch(0.9 0.005 80);
+	--color-button-fg-secondary: oklch(0.9 0.005 80);
+	--color-button-bg-secondary: oklch(0.35 0 0);
+	--color-input-bg: oklch(0.2 0.005 260);
+	--color-input-fg: oklch(0.9 0.005 80);
+	--color-placeholder: oklch(0.5 0 0);
+
+	/* gray ramp — inverted for dark bg */
+	--color-gray-50: oklch(0.21 0.005 260);
+	--color-gray-100: oklch(0.23 0.005 260);
+	--color-gray-200: oklch(0.25 0.005 260);
+	--color-gray-300: oklch(0.3 0.005 260);
+	--color-gray-400: oklch(0.4 0 0);
+	--color-gray-500: oklch(0.5 0 0);
+	--color-gray-600: oklch(0.62 0 0);
+	--color-gray-700: oklch(0.72 0.005 80);
+	--color-gray-800: oklch(0.82 0.005 80);
+	--color-gray-900: oklch(0.9 0.005 80);
 
 	--chart-max-width-sm: 960px;
 	--chart-max-width-lg: 1600px;
 
-	/* taleb — semantic colors */
-	--color-fragile: oklch(0.577 0.194 28);       /* warm red — things that break */
-	--color-robust: oklch(0.556 0 0);              /* neutral gray — things that endure */
-	--color-antifragile: oklch(0.546 0.107 241);   /* deep blue — things that gain */
-	--color-bg-warm: oklch(98% 0.004 80);          /* barely-there warm tint */
-	--color-accent: var(--color-gold);              /* amber for highlights */
+	/* taleb — semantic colors (boosted for dark bg) */
+	--color-fragile: oklch(0.68 0.2 25);           /* warm red — things that break */
+	--color-robust: oklch(0.6 0 0);                /* neutral gray — things that endure */
+	--color-antifragile: oklch(0.65 0.14 245);     /* bright blue — things that gain */
+	--color-bg-warm: oklch(0.19 0.005 260);        /* same as bg for dark theme */
+	--color-accent: oklch(0.75 0.12 80);           /* gold for highlights */
 
 	/* "1" second duration */
 	--1s: 1ms;

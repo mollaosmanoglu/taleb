@@ -18,24 +18,21 @@
 	const nPoints = 80;
 
 	const xScale = scaleLinear().domain([0, 100]).range([m.left, m.left + plotW]);
-	const yScale = scaleLinear().domain([-120, 120]).range([m.top + plotH, m.top]);
+	const yScale = scaleLinear().domain([-200, 200]).range([m.top + plotH, m.top]);
 	const zeroY = yScale(0);
 
-	// Convex payoff: limited downside, accelerating upside
-	// f(x) = x^1.6 * 0.02 (upside) capped at -floor (downside)
+	// Convex payoff (antifragile): small fixed cost, explosive upside
+	// Like buying options — you pay a premium but gains are unbounded
 	function convexPayoff(x) {
 		if (x <= 0) return 0;
-		const upside = Math.pow(x, 1.6) * 0.02;
-		const downside = Math.min(x * 0.3, 30);
-		return upside - downside;
+		return Math.pow(x, 2.2) * 0.003 - 8;
 	}
 
-	// Concave payoff: limited upside, accelerating downside
+	// Concave payoff (fragile): steady small gains, then catastrophic loss
+	// Like selling options — collect premium until blowup
 	function concavePayoff(x) {
 		if (x <= 0) return 0;
-		const upside = Math.sqrt(x) * 3;
-		const downside = Math.pow(x, 1.5) * 0.015;
-		return upside - downside;
+		return 15 * Math.log(x + 1) - Math.pow(x, 1.8) * 0.005;
 	}
 
 	const convexData = Array.from({ length: nPoints + 1 }, (_, i) => {
@@ -63,17 +60,102 @@
 	let shockLabel = $derived(
 		shock < 20 ? "Small shock" : shock < 50 ? "Moderate shock" : shock < 80 ? "Large shock" : "Black Swan"
 	);
+
+	// Barbell figure (Fig 24) — time series with floor + unlimited upside
+	const bbW = 420;
+	const bbH = 180;
+	const bbM = { top: 16, right: 16, bottom: 28, left: 16 };
+	const bbPlotW = bbW - bbM.left - bbM.right;
+	const bbPlotH = bbH - bbM.top - bbM.bottom;
+	const bbFrames = 60;
+
+	function buildBarbell(seed) {
+		let y = 0;
+		const floor = -10;
+		const pts = [{ i: 0, y: 0 }];
+		for (let i = 1; i <= bbFrames; i++) {
+			const noise = Math.sin(i * seed) * 2 + Math.cos(i * seed * 1.3) * 1.5;
+			y += noise;
+			// Floor: losses are capped
+			if (y < floor) y = floor;
+			// Occasional upside spike
+			if (i === 38) y += 25;
+			if (i === 52) y += 40;
+			pts.push({ i, y });
+		}
+		return pts;
+	}
+
+	const bbData = buildBarbell(2.1);
+	const bbAllY = bbData.map((d) => d.y);
+	const bbYMin = Math.min(...bbAllY, -15);
+	const bbYMax = Math.max(...bbAllY) * 1.1;
+	const bbXScale = scaleLinear().domain([0, bbFrames]).range([bbM.left, bbM.left + bbPlotW]);
+	const bbYScale = scaleLinear().domain([bbYMin, bbYMax]).range([bbM.top + bbPlotH, bbM.top]);
+	const bbFloorY = bbYScale(-10);
+	const bbLineFn = line().x((d) => bbXScale(d.i)).y((d) => bbYScale(d.y));
+	const bbPath = bbLineFn(bbData);
 </script>
 
 <section id="tony" class:visible use:inView onenter={() => (visible = true)}>
 	<p class="number">IV</p>
 	<h2>Fat Tony</h2>
 	<p class="parable">
-		Fat Tony bet against the crowd during the run-up to the Iraq war.
-		Limited downside, unlimited upside. Three hundred thousand became
-		eighteen million.
+		Fat Tony is Taleb's recurring character — a trader from Brooklyn
+		who makes his living from other people's blindness. He doesn't
+		predict the future. He positions himself so that prediction becomes
+		unnecessary.
 	</p>
 
+	<p class="body">
+		During the run-up to the Iraq war, Tony noticed that the market
+		priced oil as if nothing would happen. He bought options —
+		contracts that would pay off enormously if prices spiked, and cost
+		very little if they didn't.
+	</p>
+
+	<!-- Figure 1: The Barbell (Fig 24) -->
+	<div class="figure">
+		<p class="figure-label">The barbell: floor your losses, keep the upside open</p>
+		<svg viewBox="0 0 {bbW} {bbH}" class="chart">
+			<line x1={bbM.left} y1={bbM.top + bbPlotH} x2={bbM.left + bbPlotW} y2={bbM.top + bbPlotH}
+				stroke="var(--color-gray-300)" stroke-width="1" />
+			<!-- floor line -->
+			<line x1={bbM.left} y1={bbFloorY} x2={bbM.left + bbPlotW} y2={bbFloorY}
+				stroke="var(--color-fragile)" stroke-width="1" stroke-dasharray="4 3" />
+			<text x={bbM.left + bbPlotW + 2} y={bbFloorY + 4}
+				fill="var(--color-fragile)" font-size="8" font-family="var(--font-sans)">
+				Floor
+			</text>
+			<!-- the line -->
+			<path d={bbPath} fill="none" stroke="var(--color-antifragile)"
+				stroke-width="2.5" stroke-linejoin="round" />
+			<!-- unlimited upside label -->
+			<text x={bbXScale(52) + 6} y={bbYScale(bbData[52].y) - 8}
+				fill="var(--color-antifragile)" font-size="9" font-weight="700"
+				font-family="var(--font-sans)">
+				Unlimited upside
+			</text>
+			<!-- axis labels -->
+			<text x={bbM.left + bbPlotW / 2} y={bbH - 6} text-anchor="middle"
+				fill="var(--color-gray-400)" font-size="9" font-family="var(--font-sans)">
+				time
+			</text>
+		</svg>
+	</div>
+
+	<p class="body">
+		Three hundred thousand dollars became eighteen million. The key
+		was not foresight. It was asymmetry: limited downside, unlimited
+		upside. A convex payoff.
+	</p>
+
+	<p class="body">
+		Drag the slider to see how convex and concave positions diverge
+		as shocks grow.
+	</p>
+
+	<!-- Figure 2: Convexity payoff (Fig 26-27) -->
 	<div class="figure">
 		<svg viewBox="0 0 {w} {h}" class="chart">
 			<!-- axes -->
@@ -209,8 +291,24 @@
 		font-style: italic;
 		line-height: 1.6;
 		color: var(--color-gray-700);
+		margin-bottom: 16px;
+		max-width: 540px;
+	}
+
+	.body {
+		font-size: var(--16px, 1rem);
+		line-height: 1.7;
+		color: var(--color-gray-600);
 		margin-bottom: 48px;
 		max-width: 540px;
+	}
+
+	.figure-label {
+		font-family: var(--font-sans);
+		font-size: var(--12px, 0.75rem);
+		color: var(--color-gray-500);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
 	}
 
 	.figure {

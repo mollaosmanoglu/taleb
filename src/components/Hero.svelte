@@ -12,6 +12,14 @@
 		Most people answer "robust." It isn't. English is missing the
 		word — Taleb had to coin it. Five parables, five figures.
 	</p>
+	<p class="intro">
+		Some things benefit from shocks. They thrive when exposed to
+		volatility, randomness, and disorder. The resilient resists shocks
+		and stays the same; the antifragile gets better. This property is
+		behind everything that has changed with time: evolution, culture,
+		ideas, political systems, technological innovation — even our own
+		existence as a species.
+	</p>
 </header>
 
 <style>
@@ -62,6 +70,14 @@
 		font-size: var(--20px);
 		line-height: 1.6;
 		color: var(--color-gray-800);
+		max-width: 540px;
+		margin-bottom: 24px;
+	}
+
+	.intro {
+		font-size: var(--16px, 1rem);
+		line-height: 1.7;
+		color: var(--color-gray-600);
 		max-width: 540px;
 	}
 </style>

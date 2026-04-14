@@ -65,9 +65,20 @@
 	<p class="number">III</p>
 	<h2>Stone and Pebbles</h2>
 	<p class="parable">
-		A king hit with one large stone is not the same as a king pelted
-		with a thousand pebbles. The harm is not proportional — it
-		accelerates.
+		A king, angry at his son, swore he would crush him with a large
+		stone. After he calmed down, he realized he was in trouble — a
+		king who breaks his oath is unfit to rule. His advisor found a
+		solution: cut the stone into pebbles and pelt the prince with
+		them.
+	</p>
+	<p class="body">
+		The difference between a thousand pebbles and one large stone of
+		equivalent weight is a potent illustration of nonlinearity. Throw
+		a ten-pound stone at someone — it causes more than twice the harm
+		of a five-pound stone, more than five times the harm of a
+		two-pound stone. Harm curves inward. Each additional unit hurts
+		more than the last. This is concavity: the hidden signature of
+		fragility. Scroll through to see it.
 	</p>
 
 	<div class="scrolly-container">
@@ -173,6 +184,14 @@
 		font-style: italic;
 		line-height: 1.6;
 		color: var(--color-gray-700);
+		margin-bottom: 16px;
+		max-width: 540px;
+	}
+
+	.body {
+		font-size: var(--16px, 1rem);
+		line-height: 1.7;
+		color: var(--color-gray-600);
 		margin-bottom: 48px;
 		max-width: 540px;
 	}
