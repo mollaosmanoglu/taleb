@@ -116,7 +116,7 @@
 </script>
 
 <section id="tony" class:visible use:inView onenter={() => (visible = true)}>
-	<p class="number">IV</p>
+	<p class="number">V</p>
 	<h2>Fat Tony</h2>
 	<p class="parable">
 		Fat Tony is Taleb's recurring character — a trader from Brooklyn

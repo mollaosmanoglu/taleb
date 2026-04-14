@@ -3,6 +3,7 @@
 	import Wind from "$components/Wind.svelte";
 	import Hydra from "$components/Hydra.svelte";
 	import Stone from "$components/Stone.svelte";
+	import Intervention from "$components/Intervention.svelte";
 	import Tony from "$components/Tony.svelte";
 	import Turkey from "$components/Turkey.svelte";
 	import Credits from "$components/Credits.svelte";
@@ -13,6 +14,7 @@
 	<Wind />
 	<Hydra />
 	<Stone />
+	<Intervention />
 	<Tony />
 	<Turkey />
 	<Credits />

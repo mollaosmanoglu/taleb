@@ -64,7 +64,7 @@
 </script>
 
 <section id="turkey">
-	<p class="number">V</p>
+	<p class="number">VI</p>
 	<h2>The Turkey</h2>
 	<p class="parable">
 		A turkey is fed for a thousand days by a butcher. Every day
