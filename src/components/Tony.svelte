@@ -18,19 +18,15 @@
 	const nPoints = 80;
 
 	const xScale = scaleLinear().domain([0, 100]).range([m.left, m.left + plotW]);
-	const yScale = scaleLinear().domain([-120, 120]).range([m.top + plotH, m.top]);
-	const zeroY = yScale(0);
 
 	// Convex payoff (antifragile): small fixed cost, explosive upside
 	function convexPayoff(x) {
-		if (x <= 0) return 0;
-		return Math.pow(x, 2.2) * 0.003 - 8;
+		return Math.pow(x, 2.2) * 0.008 - 60;
 	}
 
-	// Concave payoff (fragile): steady small gains, then catastrophic loss
+	// Concave payoff (fragile): small steady gain, catastrophic downside
 	function concavePayoff(x) {
-		if (x <= 0) return 0;
-		return 15 * Math.log(x + 1) - Math.pow(x, 1.8) * 0.005;
+		return 60 - Math.pow(x, 2.2) * 0.008;
 	}
 
 	const convexData = Array.from({ length: nPoints + 1 }, (_, i) => {
@@ -42,6 +38,13 @@
 		const x = (i / nPoints) * 100;
 		return { x, y: concavePayoff(x) };
 	});
+
+	// Compute y-domain from actual data with padding
+	const allY = [...convexData.map((d) => d.y), ...concaveData.map((d) => d.y)];
+	const yMin = Math.min(...allY) * 1.3;
+	const yMax = Math.max(...allY) * 1.15;
+	const yScale = scaleLinear().domain([yMin, yMax]).range([m.top + plotH, m.top]);
+	const zeroY = yScale(0);
 
 	const lineFn = line().x((d) => xScale(d.x)).y((d) => yScale(d.y)).curve(curveBasis);
 
@@ -226,12 +229,12 @@
 			<text x={shockX + 8} y={convexY + 4}
 				fill="var(--color-antifragile)" font-size="10" font-weight="700"
 				font-family="var(--font-mono, monospace)">
-				+{convexVal.toFixed(0)}
+				{convexVal >= 0 ? "+" : ""}{convexVal.toFixed(0)}
 			</text>
 			<text x={shockX + 8} y={concaveY + 4}
 				fill="var(--color-fragile)" font-size="10" font-weight="700"
 				font-family="var(--font-mono, monospace)">
-				{concaveVal.toFixed(0)}
+				{concaveVal >= 0 ? "+" : ""}{concaveVal.toFixed(0)}
 			</text>
 
 			<!-- curve labels -->
@@ -335,6 +338,7 @@
 	.figure {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 24px;
 		margin-bottom: 48px;
 		max-width: 540px;
@@ -348,7 +352,6 @@
 
 	.control {
 		width: 100%;
-		max-width: 360px;
 	}
 
 	.control label {
