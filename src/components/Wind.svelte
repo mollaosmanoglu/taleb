@@ -13,7 +13,7 @@
 	const shockAt = 40; // 80% through
 	const w = 220;
 	const h = 160;
-	const m = { top: 12, right: 12, bottom: 28, left: 12 };
+	const m = { top: 12, right: 40, bottom: 28, left: 12 };
 	const plotW = w - m.left - m.right;
 	const plotH = h - m.top - m.bottom;
 
@@ -114,10 +114,6 @@
 						fill="var(--color-gray-400)" font-size="9" font-family="var(--font-sans)">
 						time
 					</text>
-					<text x={m.left - 4} y={m.top + 4} text-anchor="end"
-						fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
-						value
-					</text>
 					<!-- the line -->
 					{#if frame > 0}
 						<path d={fragilePath} fill="none"
@@ -126,15 +122,10 @@
 					{/if}
 					<!-- blowup label -->
 					{#if pastShock}
-						<text x={xScale(shockAt + 2)} y={yScaleFragile(fragileData[shockAt + 1].y) - 6}
-							fill="var(--color-fragile)" font-size="9" font-weight="700"
+						<text x={xScale(shockAt + 3)} y={yScaleFragile(fragileData[shockAt + 1].y) + 14}
+							fill="var(--color-fragile)" font-size="8" font-weight="700"
 							font-family="var(--font-sans)">
 							Blowup
-						</text>
-						<text x={xScale(shockAt + 2)} y={yScaleFragile(fragileData[shockAt + 1].y) + 4}
-							fill="var(--color-fragile)" font-size="8"
-							font-family="var(--font-sans)">
-							(Black Swan)
 						</text>
 					{/if}
 				</svg>
@@ -163,10 +154,10 @@
 					{/if}
 					<!-- spike label -->
 					{#if pastShock}
-						<text x={xScale(shockAt + 2)} y={yScaleAnti(antifragileData[shockAt + 1].y) + 14}
-							fill="var(--color-antifragile)" font-size="9" font-weight="700"
+						<text x={xScale(shockAt + 3)} y={yScaleAnti(antifragileData[shockAt + 1].y) - 6}
+							fill="var(--color-antifragile)" font-size="8" font-weight="700"
 							font-family="var(--font-sans)">
-							Gains from disorder
+							Gains
 						</text>
 					{/if}
 				</svg>
@@ -231,9 +222,9 @@
 	.figure {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: 16px;
 		margin-bottom: 48px;
+		max-width: 540px;
 		opacity: 0;
 		transform: translateY(24px);
 		transition: opacity 0.8s ease, transform 0.8s ease;

@@ -265,9 +265,9 @@
 	.figure {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: 24px;
 		margin-bottom: 48px;
+		max-width: 540px;
 	}
 
 	.toggle-row {
@@ -277,7 +277,7 @@
 
 	.chart {
 		width: 100%;
-		max-width: 500px;
+		max-width: 540px;
 		height: auto;
 	}
 

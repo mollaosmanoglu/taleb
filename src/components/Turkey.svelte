@@ -12,7 +12,7 @@
 	const totalDays = 50;
 	const w = 460;
 	const h = 220;
-	const m = { top: 16, right: 16, bottom: 32, left: 48 };
+	const m = { top: 16, right: 48, bottom: 32, left: 48 };
 	const plotW = w - m.left - m.right;
 	const plotH = h - m.top - m.bottom;
 
@@ -145,18 +145,10 @@
 				/>
 
 				<!-- thanksgiving label -->
-				<text x={points[totalDays].x + 4} y={m.top + plotH / 2}
-					fill="var(--color-fragile)"
-					font-size="11" font-weight="700" font-family="var(--font-sans)">
-					Thanksgiving
-				</text>
-
-				<!-- unseen label -->
-				<text x={points[totalDays].x} y={m.top + plotH + 16}
-					text-anchor="middle" fill="var(--color-fragile)"
-					font-size="9" font-family="var(--font-sans)"
-					opacity="0.8">
-					unseen
+				<text x={points[totalDays].x - 8} y={m.top + plotH / 2}
+					text-anchor="end" fill="var(--color-fragile)"
+					font-size="9" font-weight="700" font-family="var(--font-sans)">
+					Day 1001
 				</text>
 
 				<!-- "what the turkey saw" label -->
@@ -226,9 +218,9 @@
 	.figure {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: 16px;
 		margin-bottom: 48px;
+		max-width: 540px;
 		opacity: 0;
 		transform: translateY(24px);
 		transition: opacity 0.8s ease, transform 0.8s ease;
@@ -241,7 +233,7 @@
 
 	.chart {
 		width: 100%;
-		max-width: 500px;
+		max-width: 540px;
 		height: auto;
 	}
 

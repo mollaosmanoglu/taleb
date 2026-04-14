@@ -9,7 +9,7 @@
 
 	const w = 420;
 	const h = 240;
-	const m = { top: 16, right: 24, bottom: 36, left: 56 };
+	const m = { top: 16, right: 56, bottom: 36, left: 56 };
 	const plotW = w - m.left - m.right;
 	const plotH = h - m.top - m.bottom;
 
@@ -206,13 +206,11 @@
 		z-index: 1;
 		background: var(--color-bg-warm, white);
 		padding: 16px 0;
-		display: flex;
-		justify-content: center;
 	}
 
 	.chart {
 		width: 100%;
-		max-width: 500px;
+		max-width: 540px;
 		height: auto;
 	}
 

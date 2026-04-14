@@ -5,31 +5,29 @@
 	//         concave = fragile (limited upside, unlimited downside)
 	import Slider from "$components/ui/Slider.svelte";
 	import inView from "$actions/inView.js";
-	import { line, scaleLinear, curveBasis } from "d3";
+	import { line, area, scaleLinear, curveBasis } from "d3";
 
 	let visible = $state(false);
 	let shock = $state(20);
 
 	const w = 420;
 	const h = 260;
-	const m = { top: 20, right: 24, bottom: 36, left: 56 };
+	const m = { top: 20, right: 56, bottom: 36, left: 56 };
 	const plotW = w - m.left - m.right;
 	const plotH = h - m.top - m.bottom;
 	const nPoints = 80;
 
 	const xScale = scaleLinear().domain([0, 100]).range([m.left, m.left + plotW]);
-	const yScale = scaleLinear().domain([-200, 200]).range([m.top + plotH, m.top]);
+	const yScale = scaleLinear().domain([-120, 120]).range([m.top + plotH, m.top]);
 	const zeroY = yScale(0);
 
 	// Convex payoff (antifragile): small fixed cost, explosive upside
-	// Like buying options — you pay a premium but gains are unbounded
 	function convexPayoff(x) {
 		if (x <= 0) return 0;
 		return Math.pow(x, 2.2) * 0.003 - 8;
 	}
 
 	// Concave payoff (fragile): steady small gains, then catastrophic loss
-	// Like selling options — collect premium until blowup
 	function concavePayoff(x) {
 		if (x <= 0) return 0;
 		return 15 * Math.log(x + 1) - Math.pow(x, 1.8) * 0.005;
@@ -50,6 +48,23 @@
 	const convexPath = lineFn(convexData);
 	const concavePath = lineFn(concaveData);
 
+	// Shaded areas: green above zero (gains), red below zero (losses)
+	const areaAbove = area()
+		.x((d) => xScale(d.x))
+		.y0(zeroY)
+		.y1((d) => yScale(Math.max(d.y, 0)))
+		.curve(curveBasis);
+	const areaBelow = area()
+		.x((d) => xScale(d.x))
+		.y0(zeroY)
+		.y1((d) => yScale(Math.min(d.y, 0)))
+		.curve(curveBasis);
+
+	const convexGainArea = areaAbove(convexData);
+	const convexLossArea = areaBelow(convexData);
+	const concaveGainArea = areaAbove(concaveData);
+	const concaveLossArea = areaBelow(concaveData);
+
 	// Shock marker — shows payoff at current shock level
 	let convexVal = $derived(convexPayoff(shock));
 	let concaveVal = $derived(concavePayoff(shock));
@@ -64,7 +79,7 @@
 	// Barbell figure (Fig 24) — time series with floor + unlimited upside
 	const bbW = 420;
 	const bbH = 180;
-	const bbM = { top: 16, right: 16, bottom: 28, left: 16 };
+	const bbM = { top: 16, right: 40, bottom: 28, left: 16 };
 	const bbPlotW = bbW - bbM.left - bbM.right;
 	const bbPlotH = bbH - bbM.top - bbM.bottom;
 	const bbFrames = 60;
@@ -123,7 +138,7 @@
 			<!-- floor line -->
 			<line x1={bbM.left} y1={bbFloorY} x2={bbM.left + bbPlotW} y2={bbFloorY}
 				stroke="var(--color-fragile)" stroke-width="1" stroke-dasharray="4 3" />
-			<text x={bbM.left + bbPlotW + 2} y={bbFloorY + 4}
+			<text x={bbM.left + bbPlotW - 4} y={bbFloorY - 6} text-anchor="end"
 				fill="var(--color-fragile)" font-size="8" font-family="var(--font-sans)">
 				Floor
 			</text>
@@ -131,10 +146,10 @@
 			<path d={bbPath} fill="none" stroke="var(--color-antifragile)"
 				stroke-width="2.5" stroke-linejoin="round" />
 			<!-- unlimited upside label -->
-			<text x={bbXScale(52) + 6} y={bbYScale(bbData[52].y) - 8}
-				fill="var(--color-antifragile)" font-size="9" font-weight="700"
+			<text x={bbXScale(52)} y={bbYScale(bbData[52].y) - 10} text-anchor="middle"
+				fill="var(--color-antifragile)" font-size="8" font-weight="700"
 				font-family="var(--font-sans)">
-				Unlimited upside
+				Upside
 			</text>
 			<!-- axis labels -->
 			<text x={bbM.left + bbPlotW / 2} y={bbH - 6} text-anchor="middle"
@@ -182,6 +197,12 @@
 				fill="var(--color-gray-400)" font-size="8" font-family="var(--font-sans)">
 				0
 			</text>
+
+			<!-- shaded areas: green for gains, red for losses -->
+			<path d={convexGainArea} fill="var(--color-antifragile)" opacity="0.12" />
+			<path d={convexLossArea} fill="var(--color-fragile)" opacity="0.08" />
+			<path d={concaveGainArea} fill="var(--color-antifragile)" opacity="0.08" />
+			<path d={concaveLossArea} fill="var(--color-fragile)" opacity="0.12" />
 
 			<!-- concave curve (fragile) -->
 			<path d={concavePath} fill="none" stroke="var(--color-fragile)"
@@ -314,14 +335,14 @@
 	.figure {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: 24px;
 		margin-bottom: 48px;
+		max-width: 540px;
 	}
 
 	.chart {
 		width: 100%;
-		max-width: 500px;
+		max-width: 540px;
 		height: auto;
 	}
 
