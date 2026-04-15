@@ -158,10 +158,6 @@
 				gains
 			</text>
 
-			<!-- icon centered in distribution (behind shade) -->
-			<image href={iconMap[active]} x={xScale(0) - 32} y={m.top + plotH - 74}
-				width="64" height="64" opacity="0.35" />
-
 			<!-- filled area -->
 			<path d={curveArea} fill={current.color} opacity="0.15" />
 			<!-- curve line -->
