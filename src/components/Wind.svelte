@@ -94,6 +94,14 @@
 		use:inView
 		onenter={() => { visible = true; animate(); }}
 	>
+		<!-- Black swan pops up at shock -->
+		{#if pastShock}
+			<div class="swan-container">
+				<img src="/img/black-swan.png" alt="Black Swan" class="swan" />
+				<span class="swan-label">Black Swan</span>
+			</div>
+		{/if}
+
 		<div class="charts">
 			<!-- Fragile time series -->
 			<div class="chart-wrapper">
@@ -227,6 +235,34 @@
 	.figure.visible {
 		opacity: 1;
 		transform: translateY(0);
+	}
+
+	.swan-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+		animation: swanPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	}
+
+	.swan {
+		width: 56px;
+		height: 56px;
+		object-fit: contain;
+		filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+	}
+
+	.swan-label {
+		font-family: var(--font-sans);
+		font-size: 10px;
+		color: var(--color-gray-500);
+		letter-spacing: 0.05em;
+	}
+
+	@keyframes swanPop {
+		0% { transform: scale(0); opacity: 0; }
+		60% { transform: scale(1.15); opacity: 1; }
+		100% { transform: scale(1); opacity: 1; }
 	}
 
 	.charts {
